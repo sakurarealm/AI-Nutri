@@ -31,6 +31,9 @@ target/
 # 本地调试/推送脚本（含凭据读取工具，不上传）
 .dbg/
 
+# WorkBuddy 项目记忆目录
+.workbuddy/
+
 # 日志 & 运行时
 *.log
 logs/
