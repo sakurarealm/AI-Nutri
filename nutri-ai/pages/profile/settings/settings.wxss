@@ -1,0 +1,165 @@
+.page {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #ecfeff 0%, #ffffff 55%, #f8fafc 100%);
+  padding: 24rpx;
+  box-sizing: border-box;
+}
+
+.top-card {
+  display: flex;
+  align-items: center;
+  gap: 18rpx;
+  padding: 22rpx;
+  background: #ffffff;
+  border-radius: 24rpx;
+  box-shadow: 0 16rpx 60rpx rgba(15, 23, 42, 0.06);
+}
+
+.avatar {
+  width: 96rpx;
+  height: 96rpx;
+  border-radius: 48rpx;
+  background: #f1f5f9;
+}
+
+.top-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.name {
+  font-size: 34rpx;
+  font-weight: 800;
+  color: #0f172a;
+  display: block;
+  max-width: 380rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sub {
+  margin-top: 8rpx;
+  font-size: 24rpx;
+  color: #64748b;
+  display: block;
+}
+
+.edit-btn {
+  padding: 16rpx 18rpx;
+  background: #f1f5f9;
+  color: #0f172a;
+  font-size: 26rpx;
+  font-weight: 700;
+  border-radius: 18rpx;
+  line-height: 1;
+}
+
+.edit-btn::after {
+  border: none;
+}
+
+.group {
+  margin-top: 22rpx;
+}
+
+.group-title {
+  padding: 0 10rpx 12rpx;
+  font-size: 24rpx;
+  font-weight: 800;
+  color: #64748b;
+}
+
+.cell {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 22rpx;
+  background: #ffffff;
+  border-radius: 20rpx;
+  margin-bottom: 14rpx;
+  box-shadow: 0 10rpx 40rpx rgba(15, 23, 42, 0.04);
+}
+
+.cell-multi {
+  align-items: flex-start;
+}
+
+.cell-left-col {
+  display: flex;
+  flex-direction: column;
+  gap: 6rpx;
+}
+
+.cell-sub {
+  font-size: 22rpx;
+  color: #94a3b8;
+  font-weight: 600;
+}
+
+.cell-switch .cell-right {
+  align-items: center;
+}
+
+.cell-title {
+  font-size: 30rpx;
+  color: #0f172a;
+  font-weight: 700;
+}
+
+.cell-right {
+  display: flex;
+  align-items: center;
+  gap: 10rpx;
+}
+
+.cell-icon {
+  width: 28rpx;
+  height: 28rpx;
+  opacity: 0.75;
+}
+
+.cell-value {
+  font-size: 24rpx;
+  color: #94a3b8;
+  font-weight: 700;
+}
+
+.arrow {
+  font-size: 34rpx;
+  color: #cbd5e1;
+  line-height: 1;
+}
+
+.cancel-btn {
+  background: #ef4444;
+  color: #ffffff;
+  font-size: 26rpx;
+  font-weight: 800;
+  padding: 10rpx 22rpx;
+  border-radius: 18rpx;
+  line-height: 1;
+}
+
+.cancel-btn::after {
+  border: none;
+}
+
+.danger-zone {
+  margin-top: 28rpx;
+  padding-bottom: 24rpx;
+}
+
+.logout-btn {
+  width: 100%;
+  background: #ef4444;
+  color: #ffffff;
+  font-size: 30rpx;
+  font-weight: 800;
+  border-radius: 22rpx;
+  padding: 24rpx 0;
+}
+
+.logout-btn::after {
+  border: none;
+}

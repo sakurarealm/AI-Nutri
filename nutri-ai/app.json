@@ -1,0 +1,81 @@
+{
+  "pages": [
+    "pages/nutritionbrochure/nutritionbrochure",
+    "pages/index/index",
+    "pages/profile/profile",
+    "pages/profile/health-space/health-space",
+    "pages/profile/profile-setup/profile-setup",
+    "pages/profile/settings/settings",
+    "pages/profile/vip/vip",
+    "pages/profile/vip-center/vip-center",
+    "pages/student/student",
+    "pages/feedback/feedback",
+    "pages/feedback/detail/detail",
+    "pages/rules/rules",
+    "pages/wallet/wallet",
+    "pages/address/address",
+    "pages/address/picker/picker",
+    "pages/login/login",
+    "pages/digitalHuman/digitalHuman",
+    "pages/shop/shop",
+    "pages/shop/orders/orders",
+    "pages/shop/favorites/favorites",
+    "pages/aiAgent/aiAgent",
+    "pages/dailySummary/dailySummary",
+    "pages/planTimeline/planTimeline",
+    "pages/nutritionbrochure/BodyImpactDetail/BodyImpactDetail",
+    "pages/nutritionbrochure/DataPage/DataPage",
+    "pages/nutritionbrochure/FoodRecord/FoodRecord",
+    "pages/nutritionbrochure/recognition-page/recognition-page",
+    "pages/nutritionbrochure/foodpage/foodpage",
+    "pages/nutritionbrochure/food-detail/food-detail"
+  ],
+  "plugins": {
+  },
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "AI营养助手",
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#f8f8f8"
+  },
+  "tabBar": {
+    "custom": true,
+    "color": "#7A7E83",
+    "selectedColor": "#3cc51f",
+    "borderStyle": "black",
+    "backgroundColor": "#ffffff",
+    "list": [
+      {
+        "pagePath": "pages/aiAgent/aiAgent",
+        "text": "AI助手"
+      },
+      {
+        "pagePath": "pages/profile/profile",
+        "text": "我的"
+      },
+      {
+        "pagePath": "pages/digitalHuman/digitalHuman",
+        "text": "社交"
+      },
+      {
+        "pagePath": "pages/nutritionbrochure/nutritionbrochure",
+        "text": "营养册"
+      },
+      {
+        "pagePath": "pages/shop/shop",
+        "text": "商店"
+      }
+    ]
+  },
+  "usingComponents": {
+    "custom-tabbar": "/components/custom-tabbar/custom-tabbar"
+  },
+  "networkTimeout": {
+    "request": 10000,
+    "downloadFile": 10000
+  },
+  "debug": true,
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}

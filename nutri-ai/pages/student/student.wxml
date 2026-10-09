@@ -1,0 +1,9 @@
+<view class="student-page">
+  <image class="bg" src="cloud://prod-8gp55z7w28be1fad.7072-prod-8gp55z7w28be1fad-1395409956/profile/de850965-12ba-4da9-aee2-c48001f6a773 (1).png" mode="aspectFill" />
+
+  <view class="bottom-wrap">
+    <view class="verify-shell">
+      <button class="verify-btn" bindtap="handleVerify">立即验证</button>
+    </view>
+  </view>
+</view>

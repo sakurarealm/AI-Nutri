@@ -1,0 +1,91 @@
+AI营养师技术总结
+
+关于LLM体系架构
+
+      我们这套系统本质上是一个事件驱动、时间感知、具备跨日因果规划能力的健康智能体架构，而不是传统的 LLM 对话封装，所有用户输入（文本、语音转写、图像）都会先被统一抽象为 ConversationInput，再通过事件识别与视觉识别管线转化为可落库、可追溯的 UserEvent 事实流，系统的“智能”并不依赖即时对话结果，而是建立在持续累积的事件序列之上；实时交互链路中由 ConversationOrchestratorService 负责编排“事件生成 → 策略决策 → 动作分流 → 陪聊响应”，其中 HealthDecisionService 只输出幂等、时间窗口受控的 DecisionResult，完全不直接产生面向用户的自然语言，从而保证决策逻辑与表达层彻底解耦；时间维度上通过独立的调度与时间槽机制，将一天拆解为可计算的时序窗口（如早餐前、餐后、用药点、睡前），支持“前一晚生成计划、当天多次触发执行、次日基于反馈自动调整”的多步因果链路；图像识别作为第一类输入被直接纳入事件体系，拍照结果不是文案，而是参与后续营养评估、补救建议与晚餐规划的结构化信号；最终所有主动触达、用药提醒、膳食建议、总结报告都不是即时对话产物，而是由事件历史 + 计划状态 + 时间触发共同驱动，这使系统从被动响应型 AI 升级为具备长期记忆、时间意识和策略一致性的健康智能体。
+
+总结：跳出 LLM 同质化陷阱，做的是 “真智能体” 而非 “对话壳子”
+
+      现在市面上 90% 的 AI 健康产品，都是 “LLM + 知识库” 的对话封装，而我们做的是有长期记忆、时间感知、因果规划的智能体—— 这个差异，是 “抄模板” 和 “做原创” 的区别。
+
+
+查看已有食谱：
+SQL
+
+
+
+SELECT id, title, calories, timeMinutes, organKeys, tags, isActive, sortOrderFROM recipesORDER BY sortOrder DESC, id ASC;
+查看某个食谱的食材/步骤：
+SQL
+
+
+
+SELECT recipeId, sortNo, name, amountFROM recipe_ingredientsWHERE recipeId = 1ORDER BY sortNo ASC;SELECT recipeId, sortNo, title, description, timeMinutesFROM recipe_stepsWHERE recipeId = 1ORDER BY sortNo ASC;
+手动新增一条食谱（示例：先插 recipes，再插 ingredients/steps）：
+SQL
+
+
+
+INSERT INTO recipes(title, imageUrl, calories, timeMinutes, carbG, proteinG, fatG, fiberG, defaultReason, valueText, organKeys, tags, sortOrder, isActive, createdAt, updatedAt)VALUES('示例食谱A', 'https://example.com/a.jpg', 300, 15, 25.0, 25.0, 10.0, 6.0, '默认推荐理由', '为什么适合你（长文） ', 'intestine,pancreas',  'high_fiber,low_sugar', 50, 1, NOW (), NOW());SET @rid := LAST_INSERT_ID();INSERT INTO recipe_ingredients (recipeId, sortNo, name, amount) VALUES(@rid, 0, '食材1', '100g'),(@rid, 1, '食材2', '50g');INSERT INTO recipe_steps (recipeId, sortNo, title, description, timeMinutes) VALUES(@rid, 0, '步骤1', '描述1', 5),(@rid, 1, '步骤2', '描述2', 10);
+
+
+-- ==============================================
+-- 一键删除所有nickname含"测试用户"的用户及关联数据
+-- 无需备份，执行即删除，适合测试后快速清理
+-- ==============================================
+
+-- 第一步：先查询要删除的测试用户ID（用于关联表删除）
+DROP TEMPORARY TABLE IF EXISTS temp_test_user_ids;
+CREATE TEMPORARY TABLE temp_test_user_ids AS
+SELECT id FROM users WHERE nickname LIKE '%测试用户%';
+
+-- 第二步：删除所有关联表的测试用户数据（覆盖所有关联表）
+DELETE FROM auth_refresh_tokens WHERE user_id IN (SELECT id FROM temp_test_user_ids);
+DELETE FROM conversation_records WHERE user_id IN (SELECT id FROM temp_test_user_ids);
+DELETE FROM daily_plan_records WHERE user_id IN (SELECT id FROM temp_test_user_ids);
+DELETE FROM daily_summary_records WHERE user_id IN (SELECT id FROM temp_test_user_ids);
+DELETE FROM decision_consume_records WHERE user_id IN (SELECT id FROM temp_test_user_ids);
+DELETE FROM family_members WHERE user_id IN (SELECT id FROM temp_test_user_ids);
+DELETE FROM health_records WHERE user_id IN (SELECT id FROM temp_test_user_ids);
+DELETE FROM inbox_ack_records WHERE user_id IN (SELECT id FROM temp_test_user_ids);
+DELETE FROM login_records WHERE user_id IN (SELECT id FROM temp_test_user_ids);
+DELETE FROM nutrition_food_pick_records WHERE user_id IN (SELECT id FROM temp_test_user_ids);
+DELETE FROM nutrition_meal_records WHERE user_id IN (SELECT id FROM temp_test_user_ids);
+DELETE FROM nutrition_snack_cards WHERE user_id IN (SELECT id FROM temp_test_user_ids);
+DELETE FROM op_logs WHERE user_id IN (SELECT id FROM temp_test_user_ids);
+DELETE FROM payment_orders WHERE user_id IN (SELECT id FROM temp_test_user_ids);
+DELETE FROM refund_orders WHERE user_id IN (SELECT id FROM temp_test_user_ids);
+DELETE FROM reminder_intent_records WHERE user_id IN (SELECT id FROM temp_test_user_ids);
+DELETE FROM reminder_schedule_records WHERE user_id IN (SELECT id FROM temp_test_user_ids);
+DELETE FROM spend_orders WHERE user_id IN (SELECT id FROM temp_test_user_ids);
+DELETE FROM system_message_meta_records WHERE user_id IN (SELECT id FROM temp_test_user_ids);
+DELETE FROM user_capability_change_records WHERE user_id IN (SELECT id FROM temp_test_user_ids);
+DELETE FROM user_capability_profiles WHERE user_id IN (SELECT id FROM temp_test_user_ids);
+DELETE FROM user_event_records WHERE user_id IN (SELECT id FROM temp_test_user_ids);
+DELETE FROM user_profiles WHERE user_id IN (SELECT id FROM temp_test_user_ids);
+DELETE FROM user_vip_subscriptions WHERE user_id IN (SELECT id FROM temp_test_user_ids);
+DELETE FROM vip_orders WHERE user_id IN (SELECT id FROM temp_test_user_ids);
+DELETE FROM wallet_accounts WHERE user_id IN (SELECT id FROM temp_test_user_ids);
+DELETE FROM wallet_transactions WHERE user_id IN (SELECT id FROM temp_test_user_ids);
+
+-- 第三步：删除users主表的测试用户（核心）
+DELETE FROM users WHERE nickname LIKE '%测试用户%';
+
+-- 第四步：清理临时表
+DROP TEMPORARY TABLE IF EXISTS temp_test_user_ids;
+
+-- 输出删除结果提示
+SELECT '测试用户已全部删除' AS 结果, COUNT(*) AS 剩余测试用户数 FROM users WHERE nickname LIKE '%测试用户%';
+
+
+cd admin-web-new
+pnpm dev --host 0.0.0.0 --port 5173
+
+## 如何使用（本项目约定）
+- 迁移脚本放哪里
+  - 放在： aiHeathAgent/src/main/resources/db/migration/
+- 命名规则（Flyway 默认）
+  - V<版本号>__<描述>.sql
+  - 示例： V2__add_user_index.sql 、 V3__alter_daily_summary.sql
+- 什么时候执行
+  - 应用启动时自动执行 （Spring Boot 会在 DataSource 准备好后跑 Flyway）

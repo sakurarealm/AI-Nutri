@@ -1,0 +1,7 @@
+{
+  "navigationStyle": "custom",
+  "usingComponents": {
+    "proactive-notification": "/components/proactive-notification/proactive-notification"
+  },
+  "enablePullDownRefresh": false
+}

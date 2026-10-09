@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "今日计划表",
+  "navigationStyle": "default",
+  "backgroundColor": "#f8fafc",
+  "backgroundTextStyle": "dark",
+  "enablePullDownRefresh": true
+}

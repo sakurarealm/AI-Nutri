@@ -1,0 +1,522 @@
+<!-- pages/aiAgent/aiAgent.wxml -->
+<view class="page">
+  <!-- 状态栏 -->
+  <view class="status-bar" style="height: {{statusBarHeight}}px;"></view>
+
+  <!-- AI分析动画容器 -->
+  <view class="analysis-overlay" wx:if="{{showAnalysisAnimation}}">
+    <view class="analysis-content">
+      <view class="analysis-icon"></view>
+      <view class="analysis-text">{{analysisText}}</view>
+    </view>
+  </view>
+
+  <!-- 数字人常驻头部 -->
+  <view class="header">
+    <view class="digital-human-section">
+      <view class="dh-avatar-container" bindtap="onStartAIPhoneCall">
+        <view class="dh-ring dh-ring-1"></view>
+        <view class="dh-ring dh-ring-2"></view>
+        <image class="dh-avatar" src="{{dhAvatarUrl}}" mode="aspectFill" binderror="onDhAvatarError"></image>
+        <view class="dh-status-dot"></view>
+      </view>
+      <view class="dh-info" bindlongpress="onHeaderLongPress">
+        <view class="dh-name-row">
+          <text class="dh-name">AI 营养师</text>
+          <text class="dh-badge">在线</text>
+        </view>
+        <text class="dh-greeting">{{dhGreeting}}</text>
+      </view>
+    </view>
+    <view class="header-actions">
+      <view class="header-action-chip" bindtap="navigateToPlanTimeline">
+        <image class="header-action-icon" src="/static/aiAgentPage/clock.svg" mode="aspectFit"></image>
+      </view>
+      <view class="header-action-chip" bindtap="onStartAIPhoneCall">
+        <image class="header-action-icon" src="/static/aiAgentPage/phone.svg" mode="aspectFit"></image>
+      </view>
+    </view>
+  </view>
+
+  <scroll-view
+    class="main-container"
+    scroll-y
+    scroll-into-view="{{scrollIntoView}}"
+    scroll-with-animation="{{scrollWithAnimation}}"
+    style="padding-bottom: {{contentBottomPaddingPx}}px;"
+    enhanced="{{true}}"
+    bounces="{{true}}"
+    show-scrollbar="{{false}}"
+    upper-threshold="{{80}}"
+    bindscrolltoupper="onScrollToUpper"
+    bindscroll="onScroll"
+    refresher-enabled="{{true}}"
+    refresher-threshold="{{100}}"
+    refresher-default-style="none"
+    refresher-background="#ffffff"
+    bindrefresherrefresh="onRefresh"
+    refresher-triggered="{{refresherTriggered}}"
+  >
+    <view class="timeline-wrapper">
+      <view class="top-load-indicator">
+        <view wx:if="{{loadingOlderHistory}}" class="top-load-pill">
+          <view class="top-load-spinner"></view>
+          <text class="top-load-text">正在加载更早消息…</text>
+        </view>
+        <view wx:elif="{{historyHasMore === false}}" class="top-load-pill ghost">
+          <text class="top-load-text">没有更多历史了</text>
+        </view>
+      </view>
+      <view class="top-buffer"></view>
+      <block wx:for="{{renderTimeline}}" wx:key="id" wx:for-item="m">
+        <view class="timeline-item {{m._justLoaded ? 'just-loaded' : ''}}" id="msg-{{m.id}}">
+          <view wx:if="{{m.systemMessageType == 'CHAT' || m.systemMessageType == 'PROACTIVE_INQUIRY'}}" class="message-item">
+            <view wx:if="{{m.role == 'assistant' || m.role == 'system'}}">
+              <view class="message-row">
+                <image class="message-avatar" src="{{m.avatar}}" mode="aspectFill"></image>
+                <view class="message-bubble ai-bubble">
+                  <view wx:if="{{m.pending}}" class="pending-bubble">
+                    <view wx:if="{{m.pendingKind == 'summary'}}" class="pending-summary">
+                      <text class="pending-summary-title">正在生成日终汇总</text>
+                      <view class="summary-progress-track">
+                        <view class="summary-progress-bar"></view>
+                      </view>
+                    </view>
+                    <view wx:else class="typing-dots">
+                      <view class="dot"></view>
+                      <view class="dot"></view>
+                      <view class="dot"></view>
+                    </view>
+                  </view>
+                  <text wx:else class="message-text">{{m.text}}</text>
+                  <text class="message-time">{{m.timeText}}</text>
+                  <view wx:if="{{!m.pending && !m.typing}}" class="bubble-action-divider"></view>
+                  <view wx:if="{{!m.pending && !m.typing}}" class="bubble-action-bar">
+                    <view class="bubble-action-left">
+                      <view class="bubble-action-btn" bindtap="onBubbleCopy" data-id="{{m.id}}">
+                        <image class="bubble-action-icon" src="{{chatActionIcons.copy}}" mode="aspectFit"></image>
+                      </view>
+                      <view class="bubble-action-btn" bindtap="onBubbleSpeak" data-id="{{m.id}}">
+                        <image wx:if="{{!(ttsActiveId == m.id && ttsActivePhase != '')}}" class="bubble-action-icon" src="{{chatActionIcons.tts}}" mode="aspectFit"></image>
+                        <view wx:else class="bubble-action-spinner"></view>
+                      </view>
+                    </view>
+                    <view class="bubble-action-right">
+                      <button class="bubble-action-btn bubble-action-share" open-type="share" data-id="{{m.id}}">
+                        <image class="bubble-action-icon" src="{{chatActionIcons.share}}" mode="aspectFit"></image>
+                      </button>
+                    </view>
+                  </view>
+                </view>
+              </view>
+              <view wx:if="{{m.id == quickReplyAnchorId && quickReplies && quickReplies.length}}" class="quick-reply-row">
+                <view class="quick-reply-spacer"></view>
+                <view class="quick-reply-list">
+                  <view
+                    wx:for="{{quickReplies}}"
+                    wx:key="*this"
+                    wx:for-item="q"
+                    class="quick-reply-chip"
+                    bindtap="onQuickReplyTap"
+                    data-text="{{q}}"
+                  >
+                    <text class="quick-reply-text">{{q}}</text>
+                  </view>
+                </view>
+              </view>
+            </view>
+            <view wx:else class="message-row user-row">
+              <view class="message-bubble user-bubble">
+                <text class="message-text">{{m.text}}</text>
+                <text class="message-time">{{m.timeText}}</text>
+              </view>
+              <image class="message-avatar" src="{{m.avatar}}" mode="aspectFill"></image>
+            </view>
+          </view>
+
+          <view wx:elif="{{m.systemMessageType == 'CAPABILITY_GUIDE'}}" class="sys-card cap-card">
+            <view class="sys-head">
+              <text class="sys-title">可做到，但当前未开启</text>
+              <text class="sys-time">{{m.timeText}}</text>
+            </view>
+            <text class="sys-body">{{m.text}}</text>
+            <view class="sys-actions">
+              <button class="sys-btn" bindtap="onOpenCapabilitySettings" data-capkey="{{m.snapshot.recognizedIntent.requiredCapability}}">去开启</button>
+              <button class="sys-btn ghost" bindtap="onShowSnapshot" data-id="{{m.id}}">查看原因</button>
+              <button class="sys-btn ghost" bindtap="onShowExplanation" data-id="{{m.id}}">查看元信息</button>
+            </view>
+          </view>
+
+          <view wx:elif="{{m.systemMessageType == 'ONBOARDING_GATE'}}" class="sys-card gate-card">
+            <view class="sys-head">
+              <text class="sys-title">开启系统能力（推荐）</text>
+              <text class="sys-time">{{m.timeText}}</text>
+            </view>
+            <text class="sys-body">{{m.text}}</text>
+            <view class="gate-meta">
+              <text class="gate-pill pill-{{m.statusPhase}}">{{m.statusText}}</text>
+              <text class="gate-sub">将开启：系统主动提醒、日终总结</text>
+            </view>
+            <view class="sys-actions">
+              <button wx:if="{{m.statusPhase != 'ENABLED'}}" class="sys-btn" bindtap="onEnableOnboardingGateTap">一键开启</button>
+              <button wx:if="{{m.statusPhase != 'ENABLED'}}" class="sys-btn ghost" bindtap="onSkipOnboardingGateTap">稍后再说</button>
+              <button wx:else class="sys-btn ghost" bindtap="onSkipOnboardingGateTap">继续</button>
+            </view>
+          </view>
+
+          <view wx:elif="{{m.systemMessageType == 'FEATURE_GUIDE'}}" class="sys-card feature-card">
+            <view class="sys-head">
+              <text class="sys-title">试试这三个能力</text>
+              <text class="sys-time">{{m.timeText}}</text>
+            </view>
+            <view class="feature-list">
+              <block wx:for="{{m.features}}" wx:key="title" wx:for-item="f">
+                <view class="feature-item">
+                  <view class="feature-top">
+                    <text class="feature-title">{{f.title}}</text>
+                    <text class="feature-desc">{{f.desc}}</text>
+                  </view>
+                  <view class="feature-example">
+                    <text class="feature-example-label">示例</text>
+                    <text class="feature-example-text">{{f.example}}</text>
+                  </view>
+                  <view class="feature-actions">
+                    <button wx:if="{{f.action == 'photo'}}" class="sys-btn ghost feature-btn" bindtap="onImageUpload">去拍照</button>
+                    <button wx:else class="sys-btn ghost feature-btn" bindtap="onFillFeatureExample" data-text="{{f.example}}">填入输入框</button>
+                  </view>
+                </view>
+              </block>
+            </view>
+          </view>
+
+          <view wx:elif="{{m.systemMessageType == 'PLAN_FEEDBACK'}}" class="sys-card plan-card">
+            <view class="sys-head">
+              <text class="sys-title">已记录你的安排</text>
+              <text class="sys-time">{{m.timeText}}</text>
+            </view>
+            <text class="sys-body">{{m.statusText}}</text>
+            <text wx:if="{{m.subject}}" class="image-sub">{{m.subject}}</text>
+            <text wx:if="{{m.timeSlot}}" class="image-sub">{{m.timeSlot}}</text>
+            <view class="sys-actions">
+              <button class="sys-btn ghost" bindtap="onShowSnapshot" data-id="{{m.id}}">查看记录</button>
+              <button class="sys-btn ghost" bindtap="onShowExplanation" data-id="{{m.id}}">查看元信息</button>
+            </view>
+          </view>
+
+          <view wx:elif="{{m.systemMessageType == 'REMINDER'}}" class="sys-card reminder-card reminder-{{m.reminderTone}}">
+            <view class="reminder-head">
+              <view class="reminder-head-left">
+                <view class="reminder-icon">
+                  <image class="reminder-icon-img" src="{{m.reminderIcon}}" mode="aspectFit"></image>
+                </view>
+                <view class="reminder-head-text">
+                  <view class="reminder-title-row">
+                    <text class="reminder-title">{{m.reminderTitle || '系统提醒'}}</text>
+                    <text class="reminder-pill pill-{{m.statusPhase}}">{{m.reminderStatusPill || '提醒'}}</text>
+                  </view>
+                  <text wx:if="{{m.reminderSub}}" class="reminder-sub">{{m.reminderSub}}</text>
+                </view>
+              </view>
+              <text class="reminder-time">{{m.timeText}}</text>
+            </view>
+
+            <text wx:if="{{m.text}}" class="reminder-body">{{m.text}}</text>
+            <text wx:elif="{{m.statusText}}" class="reminder-body">{{m.statusText}}</text>
+
+            <view class="sys-actions reminder-actions">
+              <button wx:if="{{m.canComplete}}" class="sys-btn" bindtap="onReminderComplete" data-decisionkey="{{m.decisionKey}}">{{m.primaryActionLabel || '已完成'}}</button>
+              <button wx:if="{{m.canComplete}}" class="sys-btn ghost" bindtap="onReminderSkipToday" data-decisionkey="{{m.decisionKey}}">今天不需要</button>
+              <button wx:if="{{m.canComplete}}" class="sys-btn ghost" bindtap="onReminderDisable" data-decisionkey="{{m.decisionKey}}">不再提醒</button>
+              <button class="sys-btn ghost" bindtap="onShowExplanation" data-id="{{m.id}}">查看元信息</button>
+            </view>
+          </view>
+
+          <view wx:elif="{{m.systemMessageType == 'SYSTEM_ACK'}}" class="sys-card ack-card">
+            <view class="sys-head">
+              <text class="sys-title">系统提示</text>
+              <text class="sys-time">{{m.timeText}}</text>
+            </view>
+            <text class="sys-body">{{m.text}}</text>
+            <view class="sys-actions">
+              <button class="sys-btn ghost" bindtap="onShowExplanation" data-id="{{m.id}}">查看元信息</button>
+            </view>
+          </view>
+
+          <view wx:elif="{{m.systemMessageType == 'SUMMARY'}}" class="sys-card summary-card2">
+            <view class="summary-head">
+              <view class="summary-head-left">
+                <view class="summary-icon">
+                  <image class="summary-icon-img" src="/static/aiAgentPage/clock.svg" mode="aspectFit"></image>
+                </view>
+                <view class="summary-head-text">
+                  <text class="summary-title">日终汇总</text>
+                  <text class="summary-sub">系统复盘</text>
+                </view>
+              </view>
+              <text class="sys-time">{{m.timeText}}</text>
+            </view>
+            <text class="sys-body">{{m.text}}</text>
+            <view class="sys-actions">
+              <button class="sys-btn ghost" bindtap="onBubbleCopy" data-id="{{m.id}}">复制</button>
+              <button class="sys-btn ghost" open-type="share" data-id="{{m.id}}">分享</button>
+              <button class="sys-btn ghost" bindtap="onShowExplanation" data-id="{{m.id}}">查看元信息</button>
+            </view>
+          </view>
+
+          <view wx:elif="{{m.systemMessageType == 'FACT_RECORD'}}" class="sys-card meal-card">
+            <view class="meal-head">
+              <view class="meal-head-left">
+                <view class="meal-icon">
+                  <image class="meal-icon-img" src="/static/aiAgentPage/camera.svg" mode="aspectFit"></image>
+                </view>
+                <view class="meal-head-text">
+                  <text class="meal-title">记录饮食</text>
+                  <text class="meal-sub">拍照识别并自动写入营养册</text>
+                </view>
+              </view>
+              <text class="meal-time">{{m.timeText}}</text>
+            </view>
+            <view class="sys-actions meal-actions">
+              <button class="sys-btn" bindtap="onImageUpload">拍照识别</button>
+              <button class="sys-btn ghost" bindtap="onGoBrochure">去营养册</button>
+            </view>
+          </view>
+
+          <view wx:elif="{{m.systemMessageType == 'IMAGE_EVENT'}}" class="sys-card image-card">
+            <view class="sys-head">
+              <text class="sys-time">{{m.timeText}}</text>
+            </view>
+            <view class="image-status">
+              <image class="message-avatar" src="/images/icon_scan.png" mode="aspectFit"></image>
+            </view>
+          </view>
+
+          <view wx:elif="{{m.systemMessageType == 'IMAGE_ANALYSIS'}}" class="sys-card analysis-card">
+            <view class="analysis-head">
+              <view class="analysis-head-left">
+                <view class="analysis-icon">
+                  <image class="analysis-icon-img" src="/images/icon_scan.png" mode="aspectFit"></image>
+                </view>
+                <view class="analysis-head-text">
+                  <text class="analysis-title">影像识别完成</text>
+                  <text class="analysis-sub">{{m.timeText}}</text>
+                </view>
+              </view>
+              <view class="analysis-badges">
+                <text class="badge {{m.brochureRecorded ? 'ok' : 'pending'}}">{{m.brochureRecorded ? '营养册已写入' : '营养册写入中'}}</text>
+                <text class="badge {{m.recorded ? 'ok' : 'pending'}}">{{m.recorded ? '健康记录已写入' : '健康记录写入中'}}</text>
+              </view>
+            </view>
+            <view class="fact-items">
+              <block wx:for="{{(m.analysisItems && m.analysisItems.length) ? m.analysisItems : (m.payload && m.payload.items ? m.payload.items : [])}}" wx:key="name" wx:for-item="food">
+                <view class="fact-item">
+                  <text class="fact-name">{{food.name}}</text>
+                  <text class="fact-meta">{{food.calorieText || food.calorie}}</text>
+                  <text class="fact-meta">{{food.probabilityText || food.probability}}</text>
+                </view>
+              </block>
+            </view>
+            <view class="sys-actions analysis-actions">
+              <button class="sys-btn ghost" bindtap="onAskImageAnalysis" data-id="{{m.id}}">让 AI 分析</button>
+              <button class="sys-btn ghost" bindtap="onGoBrochure">去营养册</button>
+            </view>
+          </view>
+        </view>
+      </block>
+    </view>
+  </scroll-view>
+
+  <!-- 自定义tabbar -->
+  <custom-tabbar id="tabbar" current="{{current}}" />
+
+  <!-- 输入栏 -->
+  <view class="input-bar" style="bottom: {{inputBarBottomPx}}px;" wx:if="{{!isCalling}}">
+    <!-- 每日总结和操作按钮 -->
+    <view class="top-actions-bar">
+      <!-- 历史记录和电话按钮 -->
+      <view class="top-actions-left">
+        <view class="top-action-chip" bindtap="navigateToPlanTimeline">
+          <image class="top-action-icon" src="/static/aiAgentPage/clock.svg" mode="aspectFit"></image>
+          <view class="top-action-text">
+            <text class="top-action-title">历史记录</text>
+          </view>
+        </view>
+        <view class="top-action-chip" bindtap="onStartAIPhoneCall">
+          <image class="top-action-icon" src="/static/aiAgentPage/phone.svg" mode="aspectFit"></image>
+          <view class="top-action-text">
+            <text class="top-action-title">AI电话</text>
+          </view>
+        </view>
+      </view>
+      <!-- 每日总结 -->
+      <view wx:if="{{managerActions && managerActions.length}}" class="manager-actions-bar">
+        <scroll-view class="manager-scroll" scroll-x="true" show-scrollbar="{{false}}">
+          <view class="manager-list">
+            <view
+              wx:for="{{managerActions}}"
+              wx:key="id"
+              class="manager-chip"
+              bindtap="onManagerActionTap"
+              data-id="{{item.id}}"
+            >
+              <image wx:if="{{item.icon}}" class="manager-icon" src="{{item.icon}}" mode="aspectFit"></image>
+              <view class="manager-text">
+                <text class="manager-title">{{item.title}}</text>
+                <text wx:if="{{item.subtitle}}" class="manager-sub">{{item.subtitle}}</text>
+              </view>
+            </view>
+          </view>
+        </scroll-view>
+      </view>
+    </view>
+    <view class="input-wrapper">
+      <!-- 附件按钮 -->
+      <glass-button 
+        type="camera" 
+        icon="/static/aiAgentPage/camera.svg"
+        bind:click="onImageUpload"
+      />
+      <!-- 万用键智能建议 -->
+      <view class="suggestions-area" wx:if="{{showSmartSuggestions}}">
+        <smart-suggestions
+          visible="{{showSmartSuggestions}}"
+          scenario="{{suggestionScenario}}"
+          last-ai-text="{{lastAiText}}"
+          user-has-messaged="{{userHasMessaged}}"
+          bind:select="onSmartSuggestionSelect"
+          bind:dismiss="onSmartSuggestionDismiss"
+        ></smart-suggestions>
+      </view>
+
+      <!-- 输入框 -->
+      <view class="input-area" style="padding-bottom: {{keyboardHeight + safeAreaBottom}}px;">
+        <view class="input-area-top-row">
+          <view wx:if="{{isVoiceMode}}" class="voice-hold-btn {{isHoldingVoice ? 'holding' : ''}}" catchtouchstart="onHoldVoiceStart" catchtouchend="onHoldVoiceEnd" catchtouchcancel="onHoldVoiceCancel">
+            <view wx:if="{{isHoldingVoice}}" class="voice-ripple-container">
+              <view class="voice-ripple r1"></view>
+              <view class="voice-ripple r2"></view>
+              <view class="voice-ripple r3"></view>
+            </view>
+            <text class="voice-hold-text">{{isHoldingVoice ? '松开结束' : '按住 说话'}}</text>
+            <text wx:if="{{isHoldingVoice}}" class="voice-hold-hint">{{voiceRecordDuration}}s</text>
+          </view>
+          <textarea
+            wx:else
+            class="input-field"
+            placeholder="输入消息..."
+            value="{{inputText}}"
+            bindinput="onInputChange"
+            bindlinechange="onTextareaLineChange"
+            auto-height
+            maxlength="500"
+            show-confirm-bar="{{false}}"
+            cursor-spacing="10"
+          />
+        </view>
+      </view>
+      
+      <!-- 右侧按钮 -->
+      <view class="input-actions">
+        <block wx:if="{{!isVoiceMode && inputText && inputText.length > 0}}">
+          <glass-button 
+            type="send" 
+            icon="/static/aiAgentPage/inputButton.svg"
+            bind:click="onSendMessage"
+          />
+        </block>
+        <block wx:else>
+          <glass-button 
+            type="voice" 
+            icon="{{isVoiceMode ? '/static/aiAgentPage/键盘.svg' : '/static/aiAgentPage/语音.svg'}}"
+            bind:click="onToggleVoiceMode"
+          />
+        </block>
+      </view>
+    </view>
+  </view>
+  
+  <!-- AI电话遮罩层 -->
+  <view wx:if="{{isCalling}}" class="call-overlay" style="padding-top: {{statusBarHeight + 16}}px;">
+    <view class="call-top">
+      <text class="call-title">AI电话</text>
+      <text class="call-status">{{callStatus === 'connecting' ? '正在接通…' : '已接通'}}</text>
+      <text wx:if="{{callStatus === 'connected'}}" class="call-timer">{{callDurationStr}}</text>
+      <view wx:if="{{callStatus === 'connecting'}}" class="connecting-loader"><view class="loader"></view></view>
+    </view>
+
+    <!-- 将频谱移至通话时长下方，单排反向彩色，彻底去除外边框并居中贴近时长 -->
+    <view class="spectrum">
+      <view class="bars user-bars invert">
+        <block wx:for="{{userSpectrum}}" wx:key="index" wx:for-index="i">
+          <view class="bar" style="transform: scaleY({{item/80}}); background: {{userColors[i]}};"></view>
+        </block>
+      </view>
+    </view>
+
+    <view class="call-center">
+      <view class="avatar-container {{(isAISpeaking || isUserSpeaking) ? 'speaking' : ''}}">
+        <view class="ring ring-1"></view>
+        <view class="ring ring-2"></view>
+        <view class="ring ring-3"></view>
+        <image class="call-avatar" src="{{callAvatarImageUrl}}" mode="aspectFill"></image>
+        <video
+          id="callAvatarVideo"
+          class="call-avatar-video"
+          src="{{callAvatarVideoUrl}}"
+          autoplay="{{true}}"
+          loop="{{true}}"
+          muted="{{true}}"
+          controls="{{false}}"
+          show-center-play-btn="{{false}}"
+          show-fullscreen-btn="{{false}}"
+          show-mute-btn="{{false}}"
+          object-fit="cover"
+          plays-inline="{{true}}"
+          enable-play-gesture="{{false}}"
+        ></video>
+      </view>
+      <!-- 头像与底部按钮之间留空白 -->
+      <view class="center-spacer">
+        <view wx:if="{{isVoiceOnboarding}}" class="voice-onboarding-progress">
+          <view class="vob-steps-row">
+            <text class="vob-step-label">{{voiceOnboardingStepLabel}}</text>
+            <text class="vob-step-counter">{{voiceOnboardingProgress}}/{{voiceOnboardingTotal}}</text>
+          </view>
+          <view class="vob-bar-track">
+            <view class="vob-bar-fill" style="width: {{voiceOnboardingProgress / voiceOnboardingTotal * 100}}%"></view>
+          </view>
+        </view>
+      </view>
+
+      <!-- 工作流入口：AI超级入口，联动其他页面 -->
+      <view class="workflow-ribbon" wx:if="{{callStatus === 'connected'}}">
+        <block wx:for="{{workflowItems}}" wx:key="index" wx:for-index="i">
+          <view class="workflow-chip" catchtap="onChipTap" data-url="{{item.url}}" style="animation-delay: {{(i % 3) * 0.2}}s;">
+            <image class="chip-icon" src="{{item.icon}}" mode="aspectFit"></image>
+            <view class="chip-text">
+              <text class="chip-title">{{item.title}}</text>
+              <text class="chip-sub">{{item.subtitle}}</text>
+            </view>
+          </view>
+        </block>
+      </view>
+    </view>
+
+    <view class="call-bottom" style="padding-bottom: {{safeAreaBottom + 24}}px;">
+      <view class="control-bar">
+        <view class="control-btn glass-btn mic-btn {{isMicMuted ? 'off' : 'on'}}" bindtap="toggleMicMute">
+          <image class="control-icon" src="/static/aiAgentPage/语音.svg" mode="aspectFit"></image>
+          <view wx:if="{{isMicMuted}}" class="slash"></view>
+        </view>
+        <view class="hangup-btn glass-btn" bindtap="endAIPhoneCall">
+          <image class="hangup-icon" src="/static/aiAgentPage/hangup.svg" mode="aspectFit"></image>
+        </view>
+        <view class="control-btn glass-btn speaker-btn {{isSpeakerOn ? 'on' : 'off'}}" bindtap="toggleSpeaker">
+          <image class="control-icon" src="/static/aiAgentPage/speaker.svg" mode="aspectFit"></image>
+          <view wx:if="{{!isSpeakerOn}}" class="slash"></view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+</view>

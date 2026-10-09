@@ -1,0 +1,69 @@
+<view class="page">
+  <view class="map-section">
+    <map
+      id="pickMap"
+      class="map"
+      longitude="{{longitude}}"
+      latitude="{{latitude}}"
+      scale="{{scale}}"
+      show-location
+      bindregionchange="onRegionChange"
+    >
+      <cover-view class="topbar" style="padding-top: {{statusBarHeight}}px;">
+        <cover-view class="topbar-inner">
+          <cover-view class="nav-left" bindtap="onBack">
+            <cover-view class="nav-btn">‹</cover-view>
+          </cover-view>
+        </cover-view>
+      </cover-view>
+
+      <cover-view class="pin">
+        <cover-view class="pin-dot"></cover-view>
+        <cover-view class="pin-stick"></cover-view>
+      </cover-view>
+    </map>
+  </view>
+
+  <view class="panel">
+    <view class="pill">
+      <picker mode="region" value="{{region}}" bindchange="onRegionPick">
+        <view class="pill-left">
+          <text class="pill-left-text">{{regionShort}}</text>
+          <text class="pill-left-arrow">›</text>
+        </view>
+      </picker>
+      <view class="pill-divider"></view>
+      <view class="pill-right">
+        <input
+          class="pill-input"
+          placeholder="搜索路名/小区/写字楼/学校等"
+          placeholder-class="pill-placeholder"
+          value="{{keyword}}"
+          bindinput="onKeywordInput"
+        />
+      </view>
+    </view>
+
+    <view class="nearby-head">
+      <text class="nearby-title">附近地点</text>
+    </view>
+
+    <scroll-view class="nearby-list" scroll-y>
+      <view
+        class="nearby-item {{selectedId === item.id ? 'active' : ''}}"
+        wx:for="{{filteredLocations}}"
+        wx:key="id"
+        data-id="{{item.id}}"
+        bindtap="onPickLocation"
+      >
+        <view class="nearby-main">
+          <text class="nearby-name">{{item.name}}</text>
+          <text class="nearby-addr">{{item.address}}</text>
+        </view>
+        <text class="nearby-check" wx:if="{{selectedId === item.id}}">✓</text>
+      </view>
+    </scroll-view>
+
+    <button class="submit-btn" disabled="{{selectedId === ''}}" bindtap="onAddAddress">添加配送地址</button>
+  </view>
+</view>

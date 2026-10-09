@@ -1,0 +1,168 @@
+.page {
+  min-height: 100vh;
+  background: #f8fafc;
+  padding: 22rpx;
+  box-sizing: border-box;
+}
+
+.header {
+  padding: 10rpx 6rpx 18rpx;
+}
+
+.title {
+  font-size: 38rpx;
+  font-weight: 900;
+  color: #0f172a;
+  display: block;
+}
+
+.sub {
+  margin-top: 10rpx;
+  font-size: 24rpx;
+  font-weight: 800;
+  color: #94a3b8;
+  display: block;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.card {
+  background: #ffffff;
+  border-radius: 26rpx;
+  border: 2rpx solid rgba(15, 23, 42, 0.06);
+  box-shadow: 0 18rpx 70rpx rgba(15, 23, 42, 0.08);
+  padding: 18rpx;
+  display: flex;
+  gap: 16rpx;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+.img {
+  width: 148rpx;
+  height: 148rpx;
+  border-radius: 22rpx;
+  background: #f1f5f9;
+  flex-shrink: 0;
+}
+
+.mid {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10rpx;
+}
+
+.name {
+  font-size: 30rpx;
+  font-weight: 900;
+  color: #0f172a;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+}
+
+.spec {
+  font-size: 22rpx;
+  font-weight: 700;
+  color: #94a3b8;
+  display: block;
+}
+
+.price-row {
+  display: flex;
+  align-items: baseline;
+  gap: 6rpx;
+}
+
+.price {
+  font-size: 30rpx;
+  font-weight: 900;
+  color: #0f172a;
+}
+
+.unit {
+  font-size: 22rpx;
+  font-weight: 800;
+  color: #94a3b8;
+}
+
+.right {
+  display: flex;
+  flex-direction: column;
+  gap: 10rpx;
+  flex-shrink: 0;
+}
+
+.btn {
+  height: 60rpx;
+  border-radius: 18rpx;
+  padding: 0 16rpx;
+  font-size: 24rpx;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn::after {
+  border: none;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #14b8a6, #0ea5e9);
+  color: #ffffff;
+}
+
+.btn-ghost {
+  background: #ffffff;
+  border: 2rpx solid rgba(15, 23, 42, 0.12);
+  color: #0f172a;
+}
+
+.empty {
+  margin-top: 28rpx;
+  background: #ffffff;
+  border-radius: 26rpx;
+  border: 2rpx solid rgba(15, 23, 42, 0.06);
+  box-shadow: 0 16rpx 60rpx rgba(15, 23, 42, 0.06);
+  padding: 56rpx 26rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16rpx;
+}
+
+.empty-title {
+  font-size: 30rpx;
+  font-weight: 900;
+  color: #0f172a;
+}
+
+.empty-sub {
+  font-size: 24rpx;
+  font-weight: 800;
+  color: #94a3b8;
+}
+
+.go-shop {
+  height: 76rpx;
+  border-radius: 22rpx;
+  padding: 0 26rpx;
+  background: linear-gradient(135deg, rgba(14, 165, 233, 0.12), rgba(20, 184, 166, 0.12));
+  border: 2rpx solid rgba(14, 165, 233, 0.18);
+  font-size: 26rpx;
+  font-weight: 900;
+  color: #0f172a;
+}
+
+.go-shop::after {
+  border: none;
+}
+

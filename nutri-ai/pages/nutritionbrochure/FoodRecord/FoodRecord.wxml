@@ -1,0 +1,136 @@
+<proactive-notification id="proactive-notification" />
+
+<view class="nutrition-page">
+  <view class="meal-box" hover-class="card-pressed">
+    <view class="card-topbar"></view>
+    <text class="summary-title">
+      <view class="title-bar"></view>
+      添加食物
+    </text>
+    <text wx:if="{{targetLabel}}" class="target-tip">将添加到：{{targetLabel}}</text>
+
+    <view class="search-row" hover-class="row-pressed">
+      <text class="search-icon">🔎</text>
+      <input class="search-input" value="{{keyword}}" placeholder="搜索食物名称" bindinput="onKeywordInput" />
+      <view wx:if="{{keyword}}" class="search-clear" bindtap="clearKeyword">×</view>
+    </view>
+  </view>
+
+  <view wx:if="{{filteredRecentFoods.length}}" class="meal-box" hover-class="card-pressed">
+    <view class="card-topbar"></view>
+    <view class="meal-header">
+      <text class="meal-title">最近添加</text>
+      <text class="unit">点一下直接添加</text>
+    </view>
+
+    <view class="food-record" wx:for="{{filteredRecentFoods}}" wx:key="name" data-food="{{item}}" bindtap="onPickFood" hover-class="row-pressed">
+      <view class="side-gradient"></view>
+      <image wx:if="{{item.img}}" class="food-image" src="{{item.img}}" mode="aspectFill" />
+      <view wx:else class="food-image placeholder"></view>
+      <view class="food-info">
+        <text class="food-name">{{item.name}}</text>
+        <text class="food-unit">{{item.unit}}</text>
+      </view>
+      <view class="food-value">
+        <text>{{item.nutrient}} · {{item.calorie}}kcal</text>
+        <text class="food-arrow">＞</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="meal-box" hover-class="card-pressed">
+    <view class="card-topbar"></view>
+    <view class="meal-header">
+      <text class="meal-title">常用食物</text>
+      <text class="unit">快速添加</text>
+    </view>
+
+    <view class="food-record" wx:for="{{filteredCommonFoods}}" wx:key="name" data-food="{{item}}" bindtap="onPickFood" hover-class="row-pressed">
+      <view class="side-gradient"></view>
+      <image wx:if="{{item.img}}" class="food-image" src="{{item.img}}" mode="aspectFill" />
+      <view wx:else class="food-image placeholder"></view>
+      <view class="food-info">
+        <text class="food-name">{{item.name}}</text>
+        <text class="food-unit">{{item.unit}}</text>
+      </view>
+      <view class="food-value">
+        <text>{{item.nutrient}} · {{item.calorie}}kcal</text>
+        <text class="food-arrow">＞</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="meal-box" hover-class="card-pressed">
+    <view class="card-topbar"></view>
+    <view class="meal-header">
+      <text class="meal-title">手动添加</text>
+      <text class="unit">填完直接提交</text>
+    </view>
+
+    <view class="form">
+      <view class="form-row">
+        <text class="form-label">名称</text>
+        <input class="form-input" placeholder="比如：燕麦酸奶杯" value="{{form.name}}" data-field="name" bindinput="onFormInput" />
+      </view>
+
+      <view class="form-grid two">
+        <view class="form-cell">
+          <text class="form-label">热量(kcal)</text>
+          <input class="form-input" type="number" placeholder="选填" value="{{form.calorie}}" data-field="calorie" bindinput="onFormInput" />
+        </view>
+        <view class="form-cell">
+          <text class="form-label">单位</text>
+          <input class="form-input" placeholder="选填，如：1碗/100g" value="{{form.unit}}" data-field="unit" bindinput="onFormInput" />
+        </view>
+      </view>
+
+      <view class="form-row">
+        <text class="form-label">营养提示</text>
+        <input class="form-input" placeholder="选填，如：35克蛋白" value="{{form.nutrient}}" data-field="nutrient" bindinput="onFormInput" />
+      </view>
+
+      <view class="form-grid two">
+        <view class="form-cell">
+          <text class="form-label">碳水(g)</text>
+          <input class="form-input" type="number" placeholder="0" value="{{form.carb}}" data-field="carb" bindinput="onFormInput" />
+        </view>
+        <view class="form-cell">
+          <text class="form-label">蛋白(g)</text>
+          <input class="form-input" type="number" placeholder="0" value="{{form.protein}}" data-field="protein" bindinput="onFormInput" />
+        </view>
+      </view>
+
+      <view class="form-grid two">
+        <view class="form-cell">
+          <text class="form-label">脂肪(g)</text>
+          <input class="form-input" type="number" placeholder="0" value="{{form.fat}}" data-field="fat" bindinput="onFormInput" />
+        </view>
+        <view class="form-cell">
+          <text class="form-label">纤维(g)</text>
+          <input class="form-input" type="number" placeholder="0" value="{{form.fiber}}" data-field="fiber" bindinput="onFormInput" />
+        </view>
+      </view>
+
+      <view class="form-row">
+        <text class="form-label">图片</text>
+        <view class="img-row">
+          <view wx:if="{{form.img}}" class="img-wrap">
+            <image class="img" src="{{form.img}}" mode="aspectFill" />
+            <view class="img-close" bindtap="clearImage">×</view>
+          </view>
+          <view wx:else class="img-add" bindtap="chooseImage">选择图片</view>
+        </view>
+      </view>
+
+      <view class="form-row">
+        <text class="form-label">备注</text>
+        <textarea class="form-input textarea" placeholder="选填，比如做法/口味/食材等" value="{{form.note}}" data-field="note" bindinput="onFormInput" maxlength="200" />
+      </view>
+
+      <view class="actions">
+        <view class="primary-btn" bindtap="submitManual" hover-class="btn-pressed">添加到记录</view>
+        <view class="ghost-btn" bindtap="goBack" hover-class="btn-pressed">取消</view>
+      </view>
+    </view>
+  </view>
+</view>

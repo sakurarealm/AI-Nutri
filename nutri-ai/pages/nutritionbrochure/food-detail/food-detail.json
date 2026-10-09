@@ -1,0 +1,7 @@
+{
+  "navigationStyle": "custom",
+  "backgroundColor": "#fdfdff",
+  "usingComponents": {
+    "proactive-notification": "/components/proactive-notification/proactive-notification"
+  }
+}

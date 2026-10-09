@@ -1,0 +1,137 @@
+<proactive-notification id="proactive-notification" />
+
+<view class="page">
+  <view class="bg">
+    <view class="bg-orb orb1"></view>
+    <view class="bg-orb orb2"></view>
+  </view>
+
+  <!-- 自定义导航 -->
+  <view class="nav" style="height: {{navHeightPx}}px; padding-top: {{statusBarHeightPx}}px;">
+    <view class="nav-content" style="height: {{navContentHeightPx}}px;">
+      <view class="nav-left" bindtap="goBack">
+        <text class="back-icon">‹</text>
+      </view>
+      <text class="nav-title">AI 营养识别</text>
+      <view class="nav-right" bindtap="goToBrochure">
+        <text class="nav-link">营养册</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="layout" style="padding-top: {{navHeightPx}}px;">
+    <view class="camera-section" style="height: {{cameraHeightPx}}px;">
+      <view class="camera-wrapper">
+        <camera wx:if="{{!previewImage}}" device-position="back" flash="auto" binderror="onCameraError">
+        </camera>
+        <image wx:if="{{previewImage}}" src="{{previewImage}}" mode="aspectFill" class="preview-image" />
+
+        <view wx:if="{{!previewImage && !recognizing}}" class="empty-tip">
+          <text class="t1">对准餐食</text>
+          <text class="t2">点击下方拍照识别</text>
+        </view>
+        
+        <!-- 识别中遮罩 -->
+        <view wx:if="{{recognizing}}" class="recognizing-overlay">
+          <text class="text">AI 正在分析这餐...</text>
+        </view>
+
+        <!-- 拍照/重拍按钮 -->
+        <view class="action-bar">
+          <button wx:if="{{previewImage}}" class="reset-btn" bindtap="resetPhoto">重拍</button>
+          <button class="take-photo-btn" bindtap="takePhoto" disabled="{{recognizing}}">
+            <text class="btn-text">{{previewImage ? '重新识别' : '拍照识别'}}</text>
+          </button>
+        </view>
+      </view>
+    </view>
+
+    <scroll-view class="result-scroll" scroll-y style="height: {{resultScrollHeightPx}}px;" enhanced bounces="{{false}}">
+      <!-- 下半：结果区（拍照后展开） -->
+      <view wx:if="{{showResult}}" class="result-section">
+        <!-- 一餐概览总结 -->
+        <view class="summary-card">
+          <text class="summary-text">{{summary}}</text>
+        </view>
+
+        <!-- 热量营养轮盘 -->
+        <view wx:if="{{showWheel}}" class="wheel-section">
+          <nutrition-wheel
+            carbs="{{wheelCarbs}}"
+            protein="{{wheelProtein}}"
+            fat="{{wheelFat}}"
+            fiber="{{wheelFiber}}"
+            total-calories="{{wheelCalories}}"
+            size="{{340}}"
+          ></nutrition-wheel>
+        </view>
+
+        <!-- 主要菜品 -->
+        <view class="items-section">
+          <text class="section-title">识别到的菜品</text>
+          <view class="items-grid">
+            <view class="item" wx:for="{{mealItems}}" wx:key="name">
+              <text class="name">{{item.name}}</text>
+              <text class="portion">{{item.portion}}</text>
+              <text class="calories">{{item.calories}} 卡</text>
+            </view>
+          </view>
+        </view>
+
+        <!-- 可折叠详细信息 -->
+        <view class="fold-section">
+          <view class="fold-header" bindtap="toggleFold" data-type="nutritionFolded">
+            <text class="title">营养构成</text>
+            <text class="arrow">{{nutritionFolded ? '↓' : '↑'}}</text>
+          </view>
+          <view wx:if="{{!nutritionFolded}}" class="fold-content">
+            <text class="text">{{nutritionText}}</text>
+          </view>
+        </view>
+
+        <view class="fold-section">
+          <view class="fold-header" bindtap="toggleFold" data-type="notesFolded">
+            <text class="title">需要注意</text>
+            <text class="arrow">{{notesFolded ? '↓' : '↑'}}</text>
+          </view>
+          <view wx:if="{{!notesFolded}}" class="fold-content">
+            <text class="text">{{notesText}}</text>
+          </view>
+        </view>
+
+        <view class="fold-section">
+          <view class="fold-header" bindtap="toggleFold" data-type="impactFolded">
+            <text class="title">对当天目标的影响</text>
+            <text class="arrow">{{impactFolded ? '↓' : '↑'}}</text>
+          </view>
+          <view wx:if="{{!impactFolded}}" class="fold-content">
+            <text class="text">{{impactText}}</text>
+          </view>
+        </view>
+      </view>
+
+      <view class="bottom-spacer"></view>
+    </scroll-view>
+  </view>
+
+  <view wx:if="{{addPromptVisible}}" class="floating-card">
+    <view class="floating-title">是否添加进营养册？</view>
+    <view class="floating-actions">
+      <view class="floating-btn ghost" bindtap="dismissAddPrompt">暂不</view>
+      <view class="floating-btn primary" bindtap="openMealPicker">添加</view>
+    </view>
+  </view>
+
+  <view wx:if="{{mealPickerVisible}}" class="floating-card">
+    <view class="floating-title">选择餐次</view>
+    <view class="meal-grid">
+      <view class="meal-btn" bindtap="pickMealType" data-type="BREAKFAST">早餐</view>
+      <view class="meal-btn" bindtap="pickMealType" data-type="LUNCH">午餐</view>
+      <view class="meal-btn" bindtap="pickMealType" data-type="DINNER">晚餐</view>
+    </view>
+    <view class="floating-actions">
+      <view class="floating-btn ghost" bindtap="cancelMealPicker">返回</view>
+      <view class="floating-btn ghost" bindtap="goToBrochure">去营养册</view>
+    </view>
+  </view>
+</view>

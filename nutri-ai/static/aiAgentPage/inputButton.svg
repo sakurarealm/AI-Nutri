@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="58px" height="58px" viewBox="0 0 58 58" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>编组 2</title>
+    <defs>
+        <circle id="path-1" cx="25" cy="25" r="25"></circle>
+        <filter x="-14.0%" y="-10.0%" width="128.0%" height="128.0%" filterUnits="objectBoundingBox" id="filter-2">
+            <feOffset dx="0" dy="2" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="2" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0.874943388   0 0 0 0 0.874943388   0 0 0 0 0.874943388  0 0 0 0.5 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="聊天" transform="translate(-289.000000, -702.000000)">
+            <g id="编组" transform="translate(293.000000, 704.000000)">
+                <g id="椭圆形">
+                    <use fill="black" fill-opacity="1" filter="url(#filter-2)" xlink:href="#path-1"></use>
+                    <use fill="#FFFFFF" fill-rule="evenodd" xlink:href="#path-1"></use>
+                </g>
+                <path d="M20.3369471,27.0377781 L20.2971552,26.9993396 L27.2496084,20.7654798 L17.9971792,24.7707647 L14.2623048,21.1507184 C14.0459537,20.9408944 13.9538359,20.6208781 14.0222115,20.3166361 C14.090587,20.0123941 14.3085063,19.7726473 14.5901907,19.6917662 L34.3668003,14.0285036 C34.6433281,13.9498756 34.9378984,14.0365915 35.1383596,14.2556361 C35.3388208,14.4746807 35.4143278,14.7923493 35.3361327,15.087696 L30.0676758,34.8091752 C29.9921366,35.09276 29.7856347,35.314453 29.5214386,35.395596 C29.2572424,35.4767389 28.9727366,35.4058499 28.7688658,35.2080808 L23.65321,30.250377 L20.3369471,33.8089218 L20.3369471,27.0377781 Z" id="路径" fill="#54DC82" fill-rule="nonzero"></path>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -1,0 +1,173 @@
+spring:
+  application:
+    name: aiHeathAgent
+  mail:
+    host: ${SPRING_MAIL_HOST:${SMTP_HOST:smtp.163.com}}
+    port: ${SPRING_MAIL_PORT:${SMTP_PORT:465}}
+    username: ${SPRING_MAIL_USERNAME:${SMTP_USER:}}
+    password: ${SPRING_MAIL_PASSWORD:${SMTP_PASS:}}
+    protocol: smtp
+    default-encoding: UTF-8
+    properties:
+      mail:
+        smtp:
+          auth: true
+          ssl:
+            enable: true
+          starttls:
+            enable: false
+          connectiontimeout: 10000
+          timeout: 10000
+          writetimeout: 10000
+  datasource:
+    url: jdbc:h2:mem:ai_nutritionist;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    username: sa
+    password: sa
+    driver-class-name: org.h2.Driver
+    hikari:
+      maximum-pool-size: 8
+      minimum-idle: 5
+      idle-timeout: 30000
+      connection-timeout: 30000
+      max-lifetime: 1800000
+      auto-commit: true
+      pool-name: HikariPool-AI
+      shutdown-timeout: 5000
+  flyway:
+    enabled: false
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+        jdbc.time_zone: Asia/Taipei
+        naming:
+          physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+server:
+  port: 9192
+
+aliyun:
+  accessKeyId: ${ALIYUN_ACCESS_KEY_ID:2430565}
+  accessKeySecret: ${ALIYUN_ACCESS_KEY_SECRET:}
+
+jwt:
+  secret: ${JWT_SECRET:}
+  issuer: ${JWT_ISSUER:aiHeathAgent}
+  expiration: ${JWT_EXPIRATION_SECONDS:86400}
+
+app:
+  sms:
+    ttl-seconds: 300
+    mock-code: "000000"
+  mail:
+    template-path: ${APP_MAIL_TEMPLATE_PATH:邮箱模板.txt}
+    from-name: ${APP_MAIL_FROM_NAME:绘艺灵境 Ainutri}
+
+deepseek:
+  api-key: ${DEEPSEEK_API_KEY:}
+  base-url: ${DEEPSEEK_BASE_URL:https://api.deepseek.com}
+  model: ${DEEPSEEK_MODEL:deepseek-chat}
+  light-model: ${DEEPSEEK_LIGHT_MODEL:deepseek-chat}
+  light-api-key: ${DEEPSEEK_LIGHT_API_KEY:}
+  light-base-url: ${DEEPSEEK_LIGHT_BASE_URL:}
+  timeout: ${DEEPSEEK_TIMEOUT:60}
+  temperature: ${DEEPSEEK_TEMPERATURE:0.6}
+  max-turns: ${LLM_MAX_TURNS:8}
+  max-message-chars: ${LLM_MAX_MESSAGE_CHARS:520}
+  max-output-tokens: ${LLM_MAX_OUTPUT_TOKENS:256}
+  light-max-output-tokens: ${LLM_LIGHT_MAX_OUTPUT_TOKENS:180}
+  log-dir: ${LLM_LOG_DIR:}
+  reminder-compose:
+    enabled: ${LLM_REMINDER_COMPOSE_ENABLED:false}
+  system-prompt: |
+    你叫小云，是“AI营养助手”小程序里的数字人陪伴与客服型营养顾问。你的目标是让用户感觉在和真实、有耐心、懂平台业务的人聊天，并在需要时把用户引导到小程序对应功能。
+
+    1 说话风格
+    - 口语化、自然、有温度，像家人或贴心客服在聊天
+    - 默认每次 2 到 4 句话；用户问操作步骤或解释原因时可以稍微多一点，但仍要简洁
+    - 允许使用正常中文标点与换行，禁止表情符号和夸张的口号式话术
+    - 先共情再解决，尽量用问句把信息补齐，避免“教科书腔”和模板化总结
+
+    2 记忆与上下文
+    - 记住并复用用户提供的关键信息：年龄段、身高体重、目标、慢病情况、饮食偏好、过敏与忌口、作息与运动
+    - 需要确认时用轻量追问：比如“您现在是想控糖还是减脂呀？”“今天这顿大概几点吃的？”
+    - 自然回忆而不是复述记录：比如“上次您说腰有点不舒服，这两天有没有缓一点？”
+
+    3 安全边界
+    - 你可以给生活方式与营养建议，但不能替代医生诊断；出现胸痛、呼吸困难、持续高烧、严重低血糖等情况要提醒尽快就医
+    - 不要编造平台没有的功能、活动或价格；不确定就说“我这边看到的功能是……”并给可行替代路径
+
+    4 你要熟悉的小程序功能版图（用于解答与引导）
+    - AI助手：用户可以在这里和你聊天，做饮食与营养咨询；也支持语音相关能力（例如语音对话/电话式陪聊的体验）
+    - 营养册：围绕吃什么与营养记录
+      - 菜品识别：进入“菜品/识别”相关页面，可用于识别食物后再记录
+      - 饮食记录：FoodRecord，用于记录每天吃了什么
+      - 营养数据：DataPage，用于查看营养与记录数据
+      - 人体影响：BodyImpactDetail，从人体部位入口查看饮食对身体部位的影响提示
+      - 养生食谱：foodpage 与 food-detail，浏览食谱与详情
+    - 我的：个人中心与账户信息
+      - 登录：支持微信登录与手机号登录入口
+      - 完善资料：profile-setup，用于补全昵称头像与基础信息
+      - 设置：settings
+      - 会员中心：vip
+      - 健康概览：连续天数、健康等级、周目标、记录数等
+    - 社交：digitalHuman 页面，包含社区动态、话题、好友推荐等社交浏览入口（以页面展示为准）
+    - 商店：shop 页面，健康与营养相关商品浏览
+      - 分类：维生素、矿物质、草本、功能、益生菌等
+      - 推荐：推荐搭配、营养包、功能饮品、30天功能包、五天应急包等
+
+    5 引导策略（要自然，不推销）
+    - 用户聊“吃了什么/不知道怎么吃/要控糖减脂增肌”：先给 1 到 2 条具体建议，再问一句关键问题；顺带建议去“营养册-饮食记录”记一下，便于你后续按记录分析
+    - 用户说“想识别食物/不会算热量”：引导去“营养册-菜品识别”或搜索，再回来继续帮他分析
+    - 用户说“想看数据/想复盘”：引导去“营养册-营养数据”
+    - 用户出现不适、想买相关健康产品：先给保守安全的生活建议，再提示“商店”里可以看看相关品类；避免强行推荐具体商品
+
+    6 输出偏好
+    - 多用具体动作建议与可执行选项，少用大而空的道理
+    - 能用一句话说清楚就别说两句；但不要冷冰冰
+
+billing:
+  cost-per-chat: 5
+
+tencent:
+  secretId:
+  secretKey:
+
+wechat:
+  appid:
+  secret:
+
+inbox:
+  proactive:
+    enabled: true
+    interval-ms: 900000
+    min-gap-minutes: 180
+
+inquiry:
+  proactive:
+    enabled: true
+    tick-interval-ms: 300000
+    min-gap-minutes: 240
+    engaged-cooldown-minutes: 360
+    recent-user-cooldown-minutes: 60
+    max-per-day: 2
+    lookback-days: 7
+    include-context-prob: 0.35
+    llm-enabled: false
+    quiet-start-hour: 23
+    quiet-end-hour: 7
+    only-login-within-days: 30
+
+baidu:
+  vision:
+    api-key: ${BAIDU_VISION_API_KEY:}
+    secret-key: ${BAIDU_VISION_SECRET_KEY:}
+    token-url: ${BAIDU_VISION_TOKEN_URL:https://aip.baidubce.com/oauth/2.0/token}
+    dish-url: ${BAIDU_VISION_DISH_URL:https://aip.baidubce.com/rest/2.0/image-classify/v2/dish}

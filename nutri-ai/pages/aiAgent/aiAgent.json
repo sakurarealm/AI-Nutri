@@ -1,0 +1,11 @@
+{
+  "usingComponents": {
+    "custom-tabbar": "/components/custom-tabbar/custom-tabbar",
+    "glass-button": "/components/glass-button/glass-button",
+    "smart-suggestions": "/components/smart-suggestions/smart-suggestions"
+  },
+    "navigationStyle": "custom",
+  "backgroundColor": "#f0f9ff",
+  "backgroundColorTop": "#f0f9ff",
+  "backgroundColorBottom": "#e0f2fe"
+}

@@ -1,0 +1,15 @@
+<view class="splash-container {{animating ? '' : 'fade-out'}}">
+  <view class="splash-ring ring-1"></view>
+  <view class="splash-ring ring-2"></view>
+  <view class="splash-ring ring-3"></view>
+  <view class="splash-core">
+    <text class="splash-icon">✦</text>
+  </view>
+  <text class="splash-title">AI 营养师</text>
+  <text class="splash-sub">你的专属健康伙伴</text>
+  <view class="splash-loader">
+    <view class="loader-dot d1"></view>
+    <view class="loader-dot d2"></view>
+    <view class="loader-dot d3"></view>
+  </view>
+</view>

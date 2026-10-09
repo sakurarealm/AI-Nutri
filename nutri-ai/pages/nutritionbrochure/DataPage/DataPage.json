@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "营养数据",
+  "usingComponents": {
+    "proactive-notification": "/components/proactive-notification/proactive-notification"
+  },
+  "enablePullDownRefresh": false
+}

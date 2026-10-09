@@ -1,0 +1,110 @@
+<view class="page">
+  <view class="header">
+    <text class="header-title">完善资料</text>
+    <text class="header-subtitle">帮助我们提供更精准的营养建议</text>
+  </view>
+
+  <view class="content">
+    <view class="main-card">
+      <!-- 头像与昵称 -->
+      <view class="avatar-section">
+        <view class="avatar-wrap" bindtap="handleChooseAvatar">
+          <image class="avatar" src="{{avatarUrl || '/images/default_avatar.svg'}}" mode="aspectFill" />
+          <view class="avatar-tip">点击更换头像</view>
+        </view>
+
+        <!-- 同步微信按钮（保留功能，但更简洁） -->
+        <button class="sync-btn" bindtap="handleSyncWechat">同步微信头像与昵称</button>
+
+        <view class="nickname-row">
+          <text class="label">昵称</text>
+          <input class="nickname-input" placeholder="请输入昵称" value="{{nickname}}" bindinput="onNicknameInput" />
+        </view>
+      </view>
+
+      <!-- 身体数据 -->
+      <view class="section">
+        <text class="section-title">身体数据</text>
+        
+        <picker mode="selector" range="{{genderOptions}}" value="{{genderIndex}}" bindchange="onGenderChange">
+          <view class="form-row">
+            <text class="label">性别</text>
+            <view class="value {{genderIndex > 0 ? 'filled' : ''}}">
+              <text>{{genderIndex > 0 ? genderOptions[genderIndex] : '请选择'}}</text>
+              <text class="arrow">></text>
+            </view>
+          </view>
+        </picker>
+
+        <view class="form-row">
+          <text class="label">年龄</text>
+          <view class="input-wrap">
+            <input type="number" placeholder="25" value="{{age}}" bindinput="onAgeInput" maxlength="3" />
+            <text class="unit">岁</text>
+          </view>
+        </view>
+
+        <view class="form-row">
+          <text class="label">身高</text>
+          <view class="input-wrap">
+            <input type="number" placeholder="170" value="{{height}}" bindinput="onHeightInput" maxlength="3" />
+            <text class="unit">cm</text>
+          </view>
+        </view>
+
+        <view class="form-row">
+          <text class="label">体重</text>
+          <view class="input-wrap">
+            <input type="digit" placeholder="65.5" value="{{weight}}" bindinput="onWeightInput" maxlength="6" />
+            <text class="unit">kg</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 目标与偏好 -->
+      <view class="section">
+        <text class="section-title">目标与偏好</text>
+
+        <picker mode="selector" range="{{goalOptions}}" value="{{goalIndex}}" bindchange="onGoalChange">
+          <view class="form-row">
+            <text class="label">目标</text>
+            <view class="value {{goalIndex >= 0 ? 'filled' : ''}}">
+              <text>{{goalIndex >= 0 ? goalOptions[goalIndex] : '请选择'}}</text>
+              <text class="arrow">></text>
+            </view>
+          </view>
+        </picker>
+
+        <picker mode="selector" range="{{activityOptions}}" value="{{activityIndex}}" bindchange="onActivityChange">
+          <view class="form-row">
+            <text class="label">活动水平</text>
+            <view class="value {{activityIndex >= 0 ? 'filled' : ''}}">
+              <text>{{activityIndex >= 0 ? activityOptions[activityIndex] : '请选择'}}</text>
+              <text class="arrow">></text>
+            </view>
+          </view>
+        </picker>
+
+        <picker mode="selector" range="{{dietOptions}}" value="{{dietIndex}}" bindchange="onDietChange">
+          <view class="form-row">
+            <text class="label">饮食偏好</text>
+            <view class="value {{dietIndex >= 0 ? 'filled' : ''}}">
+              <text>{{dietIndex >= 0 ? dietOptions[dietIndex] : '请选择'}}</text>
+              <text class="arrow">></text>
+            </view>
+          </view>
+        </picker>
+
+        <view class="form-row">
+          <text class="label">忌口/过敏</text>
+          <input placeholder="例如 牛奶、花生" value="{{allergies}}" bindinput="onAllergiesInput" />
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="footer">
+    <button class="primary-btn" bindtap="onSubmit">保存并继续</button>
+    <text class="skip-text" bindtap="onSkip">稍后再说</text>
+  </view>
+</view>

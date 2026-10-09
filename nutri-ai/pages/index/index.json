@@ -1,0 +1,9 @@
+{
+  "usingComponents": {
+    "proactive-notification": "/components/proactive-notification/proactive-notification"
+  },
+  "navigationStyle": "custom",
+  "enablePullDownRefresh": false,
+  "backgroundTextStyle": "light",
+  "backgroundColor": "#ffffff"
+}

@@ -1,0 +1,336 @@
+page {
+  background: #f8fafc;
+}
+
+.nutrition-page {
+  padding: 40rpx;
+  max-width: 1000rpx;
+  margin: 0 auto;
+  background: linear-gradient(135deg, #f8fafc 0%, #e6f9f4 100%);
+  min-height: 100vh;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+}
+
+.meal-box {
+  background: #ffffff;
+  border: 2rpx solid #e0f0ec;
+  border-radius: 40rpx;
+  padding: 38rpx 38rpx 32rpx;
+  margin-bottom: 50rpx;
+  box-shadow: 0 10rpx 40rpx rgba(0, 0, 0, 0.05), 0 2rpx 6rpx rgba(0, 200, 150, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.card-topbar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 12rpx;
+  background: linear-gradient(90deg, #00c896, #5e72e4);
+}
+
+.summary-title {
+  font-size: 44rpx;
+  font-weight: 700;
+  margin-bottom: 18rpx;
+  display: flex;
+  align-items: center;
+  color: #2d3748;
+  padding-bottom: 18rpx;
+  position: relative;
+}
+
+.title-bar {
+  width: 12rpx;
+  height: 48rpx;
+  margin-right: 24rpx;
+  background: linear-gradient(to bottom, #00c896, #5e72e4);
+  border-radius: 6rpx;
+}
+
+.target-tip {
+  display: block;
+  margin: -6rpx 0 20rpx;
+  font-size: 26rpx;
+  color: #64748b;
+  font-weight: 700;
+}
+
+.search-row {
+  display: flex;
+  align-items: center;
+  padding: 18rpx 22rpx;
+  border-radius: 30rpx;
+  background: rgba(248, 250, 252, 1);
+  border: 2rpx solid rgba(226, 232, 240, 1);
+}
+
+.search-icon {
+  font-size: 30rpx;
+  margin-right: 14rpx;
+}
+
+.search-input {
+  flex: 1;
+  font-size: 30rpx;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.search-clear {
+  width: 64rpx;
+  height: 64rpx;
+  border-radius: 22rpx;
+  background: rgba(255, 255, 255, 0.92);
+  border: 2rpx solid rgba(232, 245, 242, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40rpx;
+  font-weight: 900;
+  color: #94a3b8;
+  box-shadow: 0 6rpx 16rpx rgba(0, 0, 0, 0.03);
+}
+
+.meal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 22rpx;
+  padding-bottom: 20rpx;
+  border-bottom: 4rpx solid #e2e8f0;
+}
+
+.meal-title {
+  font-size: 36rpx;
+  font-weight: 800;
+  color: #2d3748;
+  display: flex;
+  align-items: center;
+}
+
+.unit {
+  font-size: 28rpx;
+  color: #718096;
+  font-weight: 500;
+}
+
+.food-record {
+  display: flex;
+  align-items: center;
+  padding: 22rpx 22rpx;
+  border-radius: 30rpx;
+  margin: 14rpx 0;
+  background: #ffffff;
+  border: 2rpx solid #e8f5f2;
+  box-shadow: 0 6rpx 20rpx rgba(0, 0, 0, 0.03);
+  position: relative;
+  overflow: hidden;
+}
+
+.food-record .side-gradient {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 8rpx;
+  background: linear-gradient(to bottom, #00c896, #5e72e4);
+}
+
+.food-image {
+  width: 112rpx;
+  height: 112rpx;
+  background-color: #f0f7f5;
+  border-radius: 24rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border: 3rpx solid #e8f5f2;
+  box-shadow: 0 8rpx 20rpx rgba(0, 0, 0, 0.05);
+}
+
+.food-image.placeholder {
+  background: rgba(241, 245, 249, 1);
+}
+
+.food-info {
+  flex: 1;
+  margin-left: 18rpx;
+  min-width: 0;
+}
+
+.food-name {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: #2d3748;
+  margin-bottom: 10rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.food-unit {
+  font-size: 26rpx;
+  color: #718096;
+  font-weight: 500;
+}
+
+.food-value {
+  display: flex;
+  align-items: center;
+  font-size: 28rpx;
+  color: #4a5568;
+  font-weight: 600;
+}
+
+.food-arrow {
+  font-size: 28rpx;
+  color: #94a3b8;
+  margin-left: 14rpx;
+}
+
+.form {
+  background: #ffffff;
+  border-radius: 30rpx;
+  border: 2rpx solid #e8f5f2;
+  box-shadow: 0 6rpx 20rpx rgba(0, 0, 0, 0.03);
+  padding: 18rpx 18rpx 22rpx;
+}
+
+.form-row {
+  padding: 14rpx 8rpx 10rpx;
+}
+
+.form-grid {
+  display: flex;
+  gap: 18rpx;
+  padding: 10rpx 8rpx;
+}
+
+.form-grid.two .form-cell {
+  flex: 1;
+}
+
+.form-grid.three .form-cell {
+  flex: 1;
+}
+
+.form-label {
+  display: block;
+  font-size: 24rpx;
+  color: #64748b;
+  font-weight: 800;
+  margin-bottom: 10rpx;
+}
+
+.form-input {
+  background: rgba(248, 250, 252, 1);
+  border-radius: 22rpx;
+  padding: 18rpx 16rpx;
+  font-size: 30rpx;
+  color: #0f172a;
+  border: 2rpx solid rgba(226, 232, 240, 1);
+}
+
+.textarea {
+  min-height: 140rpx;
+  line-height: 1.6;
+  box-sizing: border-box;
+}
+
+.img-row {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+}
+
+.img-wrap {
+  position: relative;
+  width: 160rpx;
+  height: 160rpx;
+  border-radius: 24rpx;
+  overflow: hidden;
+  border: 2rpx solid rgba(226, 232, 240, 1);
+  background: rgba(248, 250, 252, 1);
+}
+
+.img {
+  width: 100%;
+  height: 100%;
+}
+
+.img-close {
+  position: absolute;
+  top: 10rpx;
+  right: 10rpx;
+  width: 44rpx;
+  height: 44rpx;
+  border-radius: 16rpx;
+  background: rgba(15, 23, 42, 0.6);
+  color: #ffffff;
+  font-size: 34rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.img-add {
+  height: 76rpx;
+  padding: 0 22rpx;
+  border-radius: 22rpx;
+  background: rgba(248, 250, 252, 1);
+  border: 2rpx dashed rgba(226, 232, 240, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #334155;
+  font-size: 28rpx;
+  font-weight: 900;
+}
+
+.actions {
+  display: flex;
+  gap: 16rpx;
+  padding: 18rpx 8rpx 0;
+}
+
+.primary-btn,
+.ghost-btn {
+  flex: 1;
+  height: 92rpx;
+  border-radius: 30rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30rpx;
+  font-weight: 900;
+}
+
+.primary-btn {
+  background: linear-gradient(135deg, #00c896, #00a2ff);
+  color: #ffffff;
+  box-shadow: 0 10rpx 28rpx rgba(0, 200, 150, 0.18);
+}
+
+.ghost-btn {
+  background: rgba(241, 245, 249, 1);
+  border: 2rpx solid rgba(226, 232, 240, 1);
+  color: #0f172a;
+}
+
+.card-pressed {
+  transform: translateY(-8rpx);
+  box-shadow: 0 20rpx 40rpx rgba(0, 200, 150, 0.15) !important;
+}
+
+.btn-pressed {
+  transform: translateY(-4rpx);
+}
+
+.row-pressed {
+  background: #e6f9f4;
+}

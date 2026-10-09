@@ -1,0 +1,8 @@
+{
+  "navigationBarTitleText": "健康空间",
+  "navigationBarBackgroundColor": "#ffffff",
+  "navigationBarTextStyle": "black",
+  "backgroundColor": "#f8fafc",
+  "enablePullDownRefresh": true
+}
+

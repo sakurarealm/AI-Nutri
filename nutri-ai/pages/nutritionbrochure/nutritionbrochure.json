@@ -1,0 +1,9 @@
+{
+  "usingComponents": {
+    "custom-tabbar": "/components/custom-tabbar/custom-tabbar",
+    "proactive-notification": "/components/proactive-notification/proactive-notification"
+  },
+  "navigationStyle": "custom",
+  "backgroundColor": "#ffffff",
+  "enablePullDownRefresh": true
+}

@@ -1,0 +1,11 @@
+{
+  "usingComponents": {
+    "proactive-notification": "/components/proactive-notification/proactive-notification"
+  },
+  "navigationBarTitleText": "添加食物",
+  "navigationBarBackgroundColor": "#f8fafc",
+  "navigationBarTextStyle": "black",
+  "backgroundColor": "#f8fafc",
+  "disableScroll": false,
+  "navigationStyle": "default"
+}

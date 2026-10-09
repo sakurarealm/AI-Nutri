@@ -1,0 +1,15 @@
+<view class="notification-container {{state}}" style="top: {{topPx}}px;" aria-label="AI通知" accessibility="{{true}}">
+  <view wx:if="{{state === 'expanded'}}" class="notification-bar" bindtap="onBarTap">
+    <view class="content">
+      <view class="title">你的营养师：</view>
+      <view class="message">{{personalizedMessage}}</view> <!-- 支持个性化消息 -->
+    </view>
+    <view class="meta">
+      <image class="icon" src="/static/邮件.png" />
+      <text class="timestamp">{{timestamp}}</text> <!-- 发送时间 -->
+    </view>
+  </view>
+  <view class="handle" catchtap="toggleState">
+    <image class="handle-icon" src="/static/收起.png" /> <!-- 改为箭头图标，更直观 -->
+  </view>
+</view>

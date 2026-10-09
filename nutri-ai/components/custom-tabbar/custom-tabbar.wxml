@@ -1,0 +1,45 @@
+<view class="custom-tabbar {{showTabbar ? 'show' : ''}}">
+  <view class="tabbar-container">
+    <!-- 背景层 -->
+    <view class="tabbar-bg"></view>
+    
+    <!-- 内容层 -->
+    <view class="tabbar-content">
+      <block wx:for="{{tabList}}" wx:key="index">
+        <!-- 中间核心按钮 (AI助手) -->
+        <view 
+          wx:if="{{index === 2}}"
+          class="tabbar-item core-item {{current === index ? 'active' : ''}}"
+          bindtap="switchTab" 
+          data-index="{{index}}"
+        >
+          <view class="core-item-wrapper">
+            <image 
+              src="{{current === index ? item.iconActive : item.iconNormal}}" 
+              class="core-icon"
+              mode="aspectFit"
+            />
+          </view>
+          <text class="core-text">{{item.text}}</text>
+        </view>
+
+        <!-- 普通按钮 -->
+        <view 
+          wx:else
+          class="tabbar-item {{current === index ? 'active' : ''}}"
+          bindtap="switchTab" 
+          data-index="{{index}}"
+        >
+          <view class="tabbar-icon">
+            <image 
+              src="{{current === index ? item.iconActive : item.iconNormal}}" 
+              class="icon-image"
+              mode="aspectFit"
+            />
+          </view>
+          <text class="tabbar-text">{{item.text}}</text>
+        </view>
+      </block>
+    </view>
+  </view>
+</view>

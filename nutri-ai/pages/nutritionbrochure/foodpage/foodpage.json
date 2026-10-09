@@ -1,0 +1,8 @@
+{
+  "navigationBarTitleText": "今日饮食建议",
+  "navigationStyle": "custom",
+  "backgroundColor": "#fdfdff",
+  "usingComponents": {
+    "proactive-notification": "/components/proactive-notification/proactive-notification"
+  }
+}

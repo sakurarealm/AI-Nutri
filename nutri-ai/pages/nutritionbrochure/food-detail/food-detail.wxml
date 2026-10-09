@@ -1,0 +1,105 @@
+<proactive-notification id="proactive-notification" />
+
+<view class="page">
+  <view class="bg">
+    <view class="bg-orb orb1"></view>
+    <view class="bg-orb orb2"></view>
+  </view>
+
+  <view class="nav" style="padding-top: {{navPaddingTop}}px; padding-bottom: {{navPaddingBottom}}px;">
+    <view class="nav-left" bindtap="goBack">
+      <text class="back-icon">‹</text>
+    </view>
+    <text class="nav-title">{{kind === 'food' ? '菜品详情' : '食谱详情'}}</text>
+    <view class="nav-right {{isFavorited ? 'favorited' : ''}}" bindtap="addToFavorites">
+      <text class="heart-icon">{{isFavorited ? '♥' : '♡'}}</text>
+    </view>
+  </view>
+
+  <view class="content" style="padding-top: {{contentPaddingTop}}px; padding-bottom: {{contentPaddingBottom}}px;">
+    <view class="reason-section">
+      <text class="reason-text">{{reason}}</text>
+    </view>
+
+    <view class="hero-card">
+      <image class="hero-image" src="{{image}}" mode="aspectFill" />
+      <view class="overlay">
+        <text class="title">{{title}}</text>
+        <view class="meta">
+          <text class="calories">{{calories}} 卡</text>
+          <text wx:if="{{kind !== 'food'}}" class="time">{{time}} 分钟</text>
+          <text wx:else class="time">{{unit}}</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="nutrition-section">
+      <text class="section-title">营养成分</text>
+      <text class="section-sub">每份主要营养（约）</text>
+      <view class="nutrition-grid">
+        <view class="item"><view class="circle carb"><text class="value">{{carb}}g</text></view><text class="label">碳水</text></view>
+        <view class="item"><view class="circle protein"><text class="value">{{protein}}g</text></view><text class="label">蛋白质</text></view>
+        <view class="item"><view class="circle fat"><text class="value">{{fat}}g</text></view><text class="label">脂肪</text></view>
+        <view class="item"><view class="circle fiber"><text class="value">{{fiber}}g</text></view><text class="label">纤维</text></view>
+      </view>
+    </view>
+
+    <view wx:if="{{kind !== 'food'}}" class="ingredients-section">
+      <text class="section-title">食材清单</text>
+      <text class="section-sub">2人份</text>
+      <view class="list">
+        <view class="item" wx:for="{{ingredients}}" wx:key="name">
+          <text class="name">{{item.name}}</text>
+          <text class="amount">{{item.amount}}</text>
+        </view>
+      </view>
+    </view>
+
+    <view wx:if="{{kind !== 'food'}}" class="steps-section">
+      <text class="section-title">制作步骤</text>
+      <text class="section-sub">共{{steps.length}}步，慢慢来</text>
+      <view class="list">
+        <view class="step" wx:for="{{steps}}" wx:key="title">
+          <view class="number">{{index + 1}}</view>
+          <view class="step-content">
+            <text class="title">{{item.title}}</text>
+            <text class="desc">{{item.description}}</text>
+            <view class="time">{{item.time}} 分钟</view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <view wx:if="{{kind === 'food' && (note || nutritionValue)}}" class="steps-section">
+      <text class="section-title">备注与提示</text>
+      <text class="section-sub">可用于记录口味、做法与注意事项</text>
+      <view class="list">
+        <view wx:if="{{nutritionValue}}" class="step">
+          <view class="number">i</view>
+          <view class="step-content">
+            <text class="title">营养概览</text>
+            <text class="desc">{{nutritionValue}}</text>
+          </view>
+        </view>
+        <view wx:if="{{note}}" class="step">
+          <view class="number">N</view>
+          <view class="step-content">
+            <text class="title">备注</text>
+            <text class="desc">{{note}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <view class="value-section">
+      <text class="section-title">为什么适合你</text>
+      <text class="value-text">{{nutritionValue}}</text>
+    </view>
+  </view>
+
+  <view class="bottom-bar" style="padding-bottom: {{bottomBarPaddingBottom}}px;">
+    <view class="btn secondary" bindtap="addToFavorites">收藏</view>
+    <view wx:if="{{kind !== 'food'}}" class="btn primary" bindtap="startCooking">开始制作</view>
+    <view wx:else class="btn primary" bindtap="goBack">返回</view>
+  </view>
+</view>

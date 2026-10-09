@@ -1,0 +1,126 @@
+.notification-container {
+  position: fixed;
+  top: 160rpx;
+  left: -100%;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  transition: left 0.5s ease-in-out, opacity 0.3s ease-in-out; /* 平滑动画 */
+  opacity: 0;
+}
+
+.notification-container.hidden {
+  pointer-events: none;
+}
+
+.notification-container.expanded {
+  left: 24rpx;
+  opacity: 1;
+}
+
+.notification-container.collapsed {
+  left: 12rpx;
+  opacity: 0.9; /* 收起时稍透明，保持可见 */
+}
+
+.notification-bar {
+  width: 640rpx;
+  padding: 32rpx;
+  background: rgba(255, 255, 255, 0.7); /* 白色半透明 */
+  backdrop-filter: blur(8px); /* 毛玻璃效果 */
+  -webkit-backdrop-filter: blur(8px); /* iOS兼容 */
+  border-radius: 28rpx; /* 更大圆角，更柔和 */
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12); /* 更深的阴影 */
+  display: flex;
+  align-items: center;
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s; /* 交互反馈 */
+  position: relative; /* 为时间戳定位提供上下文 */
+}
+
+.notification-bar:hover {
+  transform: scale(1.01); /* 轻微放大，活泼感 */
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.15); /* 悬浮时更深的阴影 */
+}
+
+.content {
+  flex: 1;
+  /* padding-right 已不再需要 */
+}
+
+.icon {
+  width: 40rpx;
+  height: 40rpx;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 8rpx;
+  margin-bottom: 10rpx; /* 图标和时间戳的间距 */
+}
+
+.meta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-left: 16rpx;
+}
+
+.title {
+  font-size: 32rpx; /* 调整标题大小 */
+  font-weight: 700;
+  color: #333333; /* 深灰黑，白色主题对比 */
+  margin-bottom: 8rpx; /* 减小与消息的间距 */
+}
+
+.message {
+  font-size: 28rpx;
+  color: #555555; /* 稍浅灰 */
+  line-height: 1.5;
+  white-space: pre-wrap;
+  max-height: 8em;
+  overflow: hidden;
+}
+
+.timestamp {
+  /* position 样式不再需要 */
+  font-size: 24rpx;
+  color: #999999;
+}
+
+.handle {
+  width: 88rpx;
+  height: 120rpx;
+  background: rgba(255, 255, 255, 0.7); /* 与bar一致的毛玻璃 */
+  backdrop-filter: blur(8px);
+  border-top-right-radius: 28rpx;
+  border-bottom-right-radius: 28rpx;
+  box-shadow: 4px 0 16px rgba(0, 0, 0, 0.06);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease-in-out, width 0.3s ease-in-out; /* 拉开时宽度微变 */
+}
+
+.notification-container.collapsed .handle {
+  border-top-left-radius: 28rpx;
+  border-bottom-left-radius: 28rpx;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+}
+
+.handle:hover {
+  transform: translateX(6px); /* 拉拽感，更明显 */
+  width: 96rpx; /* 轻微变宽，提示可交互 */
+}
+
+.handle-icon {
+  width: 40rpx;
+  height: 40rpx;
+  transition: transform 0.3s ease-in-out;
+}
+
+.notification-container.expanded .handle-icon {
+  transform: rotate(180deg); /* 展开时箭头旋转 */
+}
+
+.notification-container.collapsed .notification-bar {
+  display: none;
+}

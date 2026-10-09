@@ -1,0 +1,146 @@
+<proactive-notification id="proactive-notification" />
+<view class="profile-container">
+  <!-- 顶部用户信息区域 -->
+  <view class="user-header">
+    <view class="avatar-section">
+      <image class="avatar" src="{{userInfo.avatar}}" mode="aspectFill" bindtap="handleAvatarClick" />
+      <view class="avatar-edit" bindtap="handleAvatarClick">
+        <image class="edit-icon" src="/static/profile/picture.png" mode="aspectFit" />
+      </view>
+    </view>
+
+    <view class="user-info">
+      <view class="username-line">
+        <text class="username">{{userInfo.nickname || 'Ai-Nutrier'}}</text>
+        <image wx:if="{{vipBadgeSrc}}" class="vip-badge" src="{{vipBadgeSrc}}" mode="aspectFit" />
+      </view>
+      <view class="kcoin-row">
+        <image class="kcoin-icon" src="/static/profile/K-coin.png" mode="aspectFit" />
+        <text class="kcoin-text">{{userAssets.kCoins}}</text>
+      </view>
+    </view>
+
+  </view>
+
+  <!-- VIP会员卡 -->
+  <view class="vip-card" bindtap="navigateToVip">
+    <view class="vip-card-left">
+      <image class="vip-icon" src="{{vipIconSrc}}" mode="aspectFit" />
+      <view class="vip-info">
+        <view class="vip-title-line">
+          <text class="vip-title">{{vipInfo.levelName}}</text>
+          <text class="vip-status" wx:if="{{vipInfo.level > 0}}">有效期至{{vipInfo.expireDate || '永久'}}</text>
+        </view>
+        <text class="vip-desc">{{vipInfo.level > 0 ? '享受专属特权' : '升级会员，解锁更多特权'}}</text>
+      </view>
+    </view>
+    <view class="vip-action-btn">
+      <text>{{vipInfo.level > 0 ? '续费' : '开通'}}</text>
+      <image class="arrow-icon" src="/static/profile/arrow-right.png" mode="aspectFit" />
+    </view>
+  </view>
+
+  <!-- 钱包余额卡片 -->
+  <view class="assets-card" bindtap="navigateToWallet">
+    <view class="card-header">
+      <view class="card-title">
+        <text>余额</text>
+      </view>
+      <view class="money-balance">
+        <text class="money">￥{{userAssets.balanceYuan}}</text>
+      </view>
+    </view>
+
+    <view class="wallet-entry">
+      <text class="wallet-name">Ai-nutri钱包</text>
+      <view class="wallet-right">
+        <image class="wallet-arrow" src="/static/profile/arrow-right.png" mode="aspectFit" />
+      </view>
+    </view>
+  </view>
+
+  <view class="quick-actions-card">
+    <view class="quick-action" bindtap="navigateToOrders">
+      <view class="quick-action-texts">
+        <text class="quick-action-title">我的订单</text>
+        <text class="quick-action-sub">查看最近的订单</text>
+      </view>
+      <view class="quick-action-icon-slot">
+        <image class="quick-action-icon" src="/static/profile/profile_DD.png" mode="aspectFit" />
+      </view>
+    </view>
+    <view class="quick-action-divider"></view>
+    <view class="quick-action" bindtap="navigateToFavorites">
+      <view class="quick-action-texts">
+        <text class="quick-action-title">我的收藏</text>
+        <text class="quick-action-sub">我收藏的药品</text>
+      </view>
+      <view class="quick-action-icon-slot">
+        <image class="quick-action-icon" src="/static/profile/profile_SC.png" mode="aspectFit" />
+      </view>
+    </view>
+  </view>
+
+  <!-- 健康数据概览 -->
+  <view class="health-overview">
+    <view class="section-header">
+      <view class="section-title">
+        <text>健康数据</text>
+      </view>
+      <text class="more" bindtap="navigateToHealthSpace">健康空间</text>
+    </view>
+
+    <view class="health-stats">
+      <view class="stat-item">
+        <view class="stat-texts">
+          <text class="stat-value">{{healthData.continuousDays}}</text>
+          <text class="stat-label">连续打卡</text>
+        </view>
+      </view>
+      <view class="stat-divider"></view>
+      <view class="stat-item">
+        <view class="stat-texts">
+          <text class="stat-value">{{healthData.healthLevel}}</text>
+          <text class="stat-label">健康等级</text>
+        </view>
+      </view>
+      <view class="stat-divider"></view>
+      <view class="stat-item">
+        <view class="stat-texts">
+          <text class="stat-value">{{healthData.weeklyGoals}}</text>
+          <text class="stat-label">本周目标</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="profile-menu">
+    <view class="menu-cell" data-url="/pages/address/address" bindtap="navigateTo">
+      <text class="menu-title">我的地址</text>
+      <text class="menu-arrow">›</text>
+    </view>
+    <view class="menu-divider"></view>
+    <view class="menu-cell" data-url="/pages/student/student" bindtap="navigateTo">
+      <text class="menu-title">学生验证</text>
+      <text class="menu-arrow">›</text>
+    </view>
+    <view class="menu-divider"></view>
+    <view class="menu-cell" data-url="/pages/feedback/feedback" bindtap="navigateTo">
+      <text class="menu-title">投诉与建议</text>
+      <text class="menu-arrow">›</text>
+    </view>
+    <view class="menu-divider"></view>
+    <view class="menu-cell" data-url="/pages/rules/rules" bindtap="navigateTo">
+      <text class="menu-title">条款与规则</text>
+      <text class="menu-arrow">›</text>
+    </view>
+    <view class="menu-divider"></view>
+    <view class="menu-cell" bindtap="navigateToSettings">
+      <text class="menu-title">设置</text>
+      <text class="menu-arrow">›</text>
+    </view>
+  </view>
+
+  <!-- 自定义底部导航栏 -->
+  <custom-tabbar id="tabbar" />
+</view>

@@ -1,0 +1,54 @@
+<view class="page">
+  <view class="balance-card">
+    <view class="balance-left">
+      <text class="balance-title">余额</text>
+      <text class="balance-amount">￥{{balance}}</text>
+    </view>
+
+    <view class="balance-actions">
+      <view class="card-action" data-action="recharge" bindtap="onCardAction">
+        <image class="card-action-icon" src="/static/profile/recharge.png" mode="aspectFit" />
+        <text class="card-action-text">充值</text>
+      </view>
+      <view class="card-action" data-action="manage" bindtap="onCardAction">
+        <image class="card-action-icon" src="/static/profile/manage.png" mode="aspectFit" />
+        <text class="card-action-text">管理</text>
+      </view>
+    </view>
+
+    <view class="card-chip">
+      <view class="chip-line chip-line-1"></view>
+      <view class="chip-line chip-line-2"></view>
+      <view class="chip-line chip-line-3"></view>
+    </view>
+  </view>
+
+  <view class="tabs">
+    <view class="tab {{tabIndex === 0 ? 'active' : ''}}" data-index="0" bindtap="onTabTap">
+      <text>优惠券</text>
+    </view>
+    <view class="tab {{tabIndex === 1 ? 'active' : ''}}" data-index="1" bindtap="onTabTap">
+      <text>权益卡</text>
+    </view>
+  </view>
+
+  <swiper class="content-swiper" current="{{tabIndex}}" bindchange="onSwiperChange" duration="260">
+    <swiper-item>
+      <view class="empty">
+        <text class="empty-title">您还没有卡券</text>
+        <text class="empty-sub">请更换筛选条件，或者去购买更多卡券。</text>
+      </view>
+    </swiper-item>
+    <swiper-item>
+      <view class="empty">
+        <text class="empty-title">您还没有卡券</text>
+        <text class="empty-sub">请更换筛选条件，或者去购买更多卡券。</text>
+      </view>
+    </swiper-item>
+  </swiper>
+
+  <view class="history-wrap">
+    <button class="history-btn" bindtap="onHistory">历史记录</button>
+  </view>
+</view>
+

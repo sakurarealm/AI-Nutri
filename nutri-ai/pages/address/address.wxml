@@ -1,0 +1,25 @@
+<view class="page">
+  <view class="header">
+    <text class="title">我的地址</text>
+    <text class="sub">用于配送与服务</text>
+  </view>
+
+  <view class="list">
+    <view class="card" wx:for="{{addresses}}" wx:key="id">
+      <view class="card-main">
+        <view class="top-row">
+          <text class="name">{{item.name}}</text>
+          <text class="phone">{{item.phone}}</text>
+        </view>
+        <text class="addr">{{item.address}}</text>
+      </view>
+      <view class="edit" data-id="{{item.id}}" bindtap="onEdit">
+        <image class="edit-icon" src="/static/profile/编辑.png" mode="aspectFit" />
+      </view>
+    </view>
+  </view>
+
+  <view class="footer">
+    <button class="add-btn" bindtap="onAdd">添加配送地址</button>
+  </view>
+</view>

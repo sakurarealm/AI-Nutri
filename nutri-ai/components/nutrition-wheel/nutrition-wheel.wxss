@@ -1,0 +1,10 @@
+.wheel-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.wheel-canvas {
+  display: block;
+}

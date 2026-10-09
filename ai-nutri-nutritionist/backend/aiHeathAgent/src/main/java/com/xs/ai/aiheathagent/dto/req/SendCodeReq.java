@@ -1,0 +1,12 @@
+package com.xs.ai.aiheathagent.dto.req;
+
+
+import jakarta.validation.constraints.*;
+import lombok.Data;
+
+
+@Data
+public class SendCodeReq {
+    @NotBlank private String account; // phone or email
+    @NotBlank private String scene; // register/login/reset_password
+}

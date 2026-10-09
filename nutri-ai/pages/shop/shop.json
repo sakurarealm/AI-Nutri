@@ -1,0 +1,10 @@
+{
+  "usingComponents": {
+    "custom-tabbar": "/components/custom-tabbar/custom-tabbar",
+    "proactive-notification": "/components/proactive-notification/proactive-notification"
+  },
+  "navigationStyle": "custom",
+  "backgroundColor": "#f0f5ff",
+  "enablePullDownRefresh": false,
+  "onReachBottomDistance": 50
+}

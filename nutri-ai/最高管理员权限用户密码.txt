@@ -1,0 +1,27 @@
+AKURI2133
+ff05e5aef9f9419aa9a52049634a40e5
+
+
+-- 一级管理员 1：王祥
+-- 登录账号(username)：wx_admin_wangxiang
+-- 明文密码：WangXiang#2026A1b2
+
+-- 一级管理员 2：沈劼
+-- 登录账号(username)：wx_admin_shenjie
+-- 明文密码：ShenJie#2026C3d4
+
+admin
+Admin@123456
+
+面板密码
+user
+66517800Cjj..@
+
+邮箱相关
+成功开启IMAP/SMTP服务，在第三方客户端登录时，登录密码输入以下授权密码
+EXjhiRbbddebm5D9
+19153388594@163.com
+ 66517800Cjj..@
+
+企业邮箱19153388594@163.com
+小程序密码66517800Cjj..@

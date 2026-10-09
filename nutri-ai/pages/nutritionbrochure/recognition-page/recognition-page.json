@@ -1,0 +1,8 @@
+{
+  "navigationStyle": "custom",
+  "backgroundColor": "#fdfdff",
+  "usingComponents": {
+    "proactive-notification": "/components/proactive-notification/proactive-notification",
+    "nutrition-wheel": "/components/nutrition-wheel/nutrition-wheel"
+  }
+}

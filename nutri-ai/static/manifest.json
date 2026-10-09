@@ -1,0 +1,23 @@
+{
+  "name": "Ai营养师",
+  "short_name": "Ai营养师",
+  "description": "AI营养师助手",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#409eff",
+  "orientation": "portrait",
+  "icons": [
+    {
+      
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/static/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

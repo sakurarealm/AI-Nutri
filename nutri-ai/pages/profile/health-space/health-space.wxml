@@ -1,0 +1,148 @@
+<view class="page">
+  <view class="hero">
+    <view class="hero-bg"></view>
+    <view class="hero-content">
+      <view class="user">
+        <image class="avatar" src="{{user.avatar}}" mode="aspectFill" />
+        <view class="user-meta">
+          <view class="name-row">
+            <text class="name">{{user.nickname || 'AI-nutri用户'}}</text>
+            <text class="level">{{health.healthLevel || 'Lv.0'}}</text>
+          </view>
+          <text class="subtitle">{{subtitle}}</text>
+        </view>
+      </view>
+
+      <view class="xp-card">
+        <view class="xp-top">
+          <text class="xp-title">成长值</text>
+          <text class="xp-value">{{xp.current}} / {{xp.next}}</text>
+        </view>
+        <view class="xp-bar">
+          <view class="xp-fill" style="width: {{xp.percent}}%;"></view>
+        </view>
+        <view class="xp-bottom">
+          <text class="xp-hint">再坚持 {{xp.left}} 点升级</text>
+          <text class="xp-streak">连续 {{spaceWeek.streakDays}} 天达标</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="section">
+    <view class="section-head">
+      <text class="section-title">今日三件事</text>
+      <text class="section-sub">做一点点，也算照顾自己</text>
+    </view>
+    <view class="tasks">
+      <view class="task" wx:for="{{tasks}}" wx:key="key" data-key="{{item.key}}" bindtap="onTaskTap">
+        <view class="task-left">
+          <text class="task-icon">{{item.icon}}</text>
+          <view class="task-texts">
+            <text class="task-title">{{item.title}}</text>
+            <text class="task-desc">{{item.desc}}</text>
+          </view>
+        </view>
+        <text class="task-status {{item.done ? 'done' : ''}}">{{item.done ? '已完成' : '去完成'}}</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="section">
+    <view class="section-head">
+      <text class="section-title">今日概览</text>
+      <text class="section-sub">基于你的记录自动汇总</text>
+    </view>
+    <view class="grid">
+      <view class="tile">
+        <text class="tile-label">整体完成率</text>
+        <view class="tile-main">
+          <text class="tile-value">{{spaceToday.completionRate}}</text>
+          <text class="tile-unit">%</text>
+        </view>
+        <text class="tile-foot">{{spaceToday.completionHint}}</text>
+      </view>
+      <view class="tile">
+        <text class="tile-label">温柔指数</text>
+        <view class="tile-main">
+          <text class="tile-value">{{spaceToday.warmScore}}</text>
+          <text class="tile-unit">%</text>
+        </view>
+        <text class="tile-foot">更看重趋势</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="section">
+    <view class="section-head">
+      <text class="section-title">饮食小结</text>
+      <text class="section-sub">来自营养册的今天</text>
+    </view>
+    <view class="nutrition-card" bindtap="goNutrition">
+      <view class="nutrition-top">
+        <view class="nutrition-kpi">
+          <text class="nutrition-value">{{nutrition.calorieConsumed}}</text>
+          <text class="nutrition-unit">kcal</text>
+        </view>
+        <view class="nutrition-kpi">
+          <text class="nutrition-value">{{nutrition.calorieTarget}}</text>
+          <text class="nutrition-unit">目标</text>
+        </view>
+        <text class="nutrition-action">进入营养册 ›</text>
+      </view>
+      <view class="macro">
+        <view class="macro-item">
+          <text class="macro-label">碳水</text>
+          <text class="macro-pct">{{nutrition.macroPercent.carb}}%</text>
+        </view>
+        <view class="macro-item">
+          <text class="macro-label">蛋白</text>
+          <text class="macro-pct">{{nutrition.macroPercent.protein}}%</text>
+        </view>
+        <view class="macro-item">
+          <text class="macro-label">脂肪</text>
+          <text class="macro-pct">{{nutrition.macroPercent.fat}}%</text>
+        </view>
+      </view>
+      <text class="nutrition-note">{{nutritionHint}}</text>
+    </view>
+  </view>
+
+  <view class="section">
+    <view class="section-head">
+      <text class="section-title">成就墙</text>
+      <text class="section-sub">把过程也当作奖赏</text>
+    </view>
+    <view class="badges">
+      <view class="badge" wx:for="{{spaceToday.achievements}}" wx:key="id">
+        <text class="badge-icon">{{item.icon}}</text>
+        <text class="badge-text">{{item.text}}</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="section">
+    <view class="section-head">
+      <text class="section-title">健康时间轴</text>
+      <text class="section-sub">系统与 AI 记录你的温柔瞬间</text>
+    </view>
+    <view class="timeline">
+      <view class="t-card {{item.badge === 'AI' ? 'ai' : item.badge === '系统' ? 'system' : 'anon'}}"
+            wx:for="{{spaceToday.timeline}}" wx:key="id">
+        <view class="t-head">
+          <text class="t-time">{{item.time}}</text>
+          <text class="t-badge">{{item.badge}}</text>
+        </view>
+        <text class="t-title">{{item.title}}</text>
+        <text class="t-desc">{{item.desc}}</text>
+        <view class="t-kv" wx:if="{{item.kv && item.kv.length}}">
+          <view class="kv" wx:for="{{item.kv}}" wx:key="k">
+            <text class="k">{{item.k}}：</text>
+            <text class="v">{{item.v}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>
+

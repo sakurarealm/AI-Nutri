@@ -1,0 +1,158 @@
+.custom-tabbar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 999;
+  pointer-events: none; /* 让透明区域不阻挡点击，内容区域单独开启 */
+}
+
+.tabbar-container {
+  position: relative;
+  width: 100%;
+  pointer-events: auto;
+}
+
+/* 背景层 - 增加高级感 */
+.tabbar-bg {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: calc(110rpx + env(safe-area-inset-bottom));
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-top-left-radius: 40rpx;
+  border-top-right-radius: 40rpx;
+  box-shadow: 0 -10rpx 40rpx rgba(0, 0, 0, 0.04);
+  z-index: 0;
+}
+
+/* 内容层 */
+.tabbar-content {
+  position: relative;
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-start;
+  height: 110rpx;
+  padding-bottom: env(safe-area-inset-bottom);
+  z-index: 1;
+}
+
+.tabbar-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding-top: 10rpx;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* 普通图标 */
+.tabbar-icon {
+  width: 48rpx;
+  height: 48rpx;
+  margin-bottom: 6rpx;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.icon-image {
+  width: 100%;
+  height: 100%;
+  transition: all 0.3s ease;
+}
+
+.tabbar-text {
+  font-size: 20rpx;
+  color: #94a3b8;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+/* 选中态 */
+.tabbar-item.active .tabbar-text {
+  color: #0f172a;
+  font-weight: 700;
+}
+
+.tabbar-item.active .icon-image {
+  transform: scale(1.1);
+  filter: drop-shadow(0 4rpx 8rpx rgba(0, 0, 0, 0.1));
+}
+
+/* 中间核心按钮 - 悬浮胶囊设计 */
+.tabbar-item.core-item {
+  flex: 1;
+  position: relative;
+  height: 100%;
+  justify-content: flex-start;
+  padding-top: 0;
+}
+
+.core-item-wrapper {
+  position: absolute;
+  top: -40rpx; /* 适度上浮 */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 110rpx;
+  height: 110rpx;
+  background: linear-gradient(135deg, #0f172a 0%, #334155 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 16rpx 32rpx rgba(15, 23, 42, 0.25);
+  border: 8rpx solid rgba(255, 255, 255, 0.9); /* 模拟内凹连接 */
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  z-index: 10;
+}
+
+.core-item.active .core-item-wrapper {
+  transform: translateX(-50%) translateY(-6rpx) scale(1.05);
+  box-shadow: 0 20rpx 40rpx rgba(15, 23, 42, 0.35);
+  background: linear-gradient(135deg, #000000 0%, #1e293b 100%);
+}
+
+.core-icon {
+  width: 56rpx;
+  height: 56rpx;
+  filter: brightness(0) invert(1); /* 强制白色图标 */
+}
+
+.core-text {
+  margin-top: 80rpx; /* 给悬浮按钮留出空间 */
+  font-size: 20rpx;
+  color: #94a3b8;
+  font-weight: 600;
+  opacity: 0; /* 默认隐藏文字，保持极简 */
+  transform: translateY(10rpx);
+  transition: all 0.3s ease;
+}
+
+.core-item.active .core-text {
+  opacity: 1;
+  transform: translateY(0);
+  color: #0f172a;
+}
+
+/* 点击反馈 */
+.tabbar-item:active .icon-image {
+  transform: scale(0.9);
+}
+
+.core-item-wrapper:active {
+  transform: translateX(-50%) scale(0.95);
+  box-shadow: 0 8rpx 16rpx rgba(15, 23, 42, 0.2);
+}
+
+/* 适配刘海屏 */
+.custom-tabbar {
+  padding-bottom: 0; 
+}

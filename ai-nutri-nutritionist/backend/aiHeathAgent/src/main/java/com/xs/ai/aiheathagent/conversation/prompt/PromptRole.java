@@ -1,0 +1,16 @@
+package com.xs.ai.aiheathagent.conversation.prompt;
+
+public enum PromptRole {
+    COMPANION_CHAT,
+    ONBOARDING_CHAT,
+    PROACTIVE_INQUIRY,
+    FOLLOWUP_SUGGESTION,
+    EVENT_DETECT,
+    REMINDER_COMPOSE,
+    SUMMARY_USER,
+    SUMMARY_FAMILY,
+    SUMMARY_CLINICAL,
+    ORGAN_DIET_ANALYSIS,
+    FOOD_RECOGNITION
+}
+

@@ -1,0 +1,140 @@
+<view class="page">
+  <view class="hero">
+    <view class="hero-bg">
+      <view class="orb orb1"></view>
+      <view class="orb orb2"></view>
+      <view class="orb orb3"></view>
+      <view class="shine"></view>
+    </view>
+
+    <view class="hero-top">
+      <view class="header-left">
+        <text class="header-title">AI 营养师会员</text>
+        <text class="header-sub">{{vipInfo.level > 0 ? ('有效期至 ' + (vipInfo.expireDate || '永久')) : '把体验升级成一种“更值得”'}}</text>
+      </view>
+      <view class="pill {{vipInfo.level > 0 ? 'vip' : 'normal'}}">{{vipInfo.level > 0 ? vipInfo.levelName : '普通用户'}}</view>
+    </view>
+
+    <view class="profile-card">
+      <view class="profile-left">
+        <view class="avatar">
+          <text class="avatar-text">{{avatarInitial}}</text>
+        </view>
+        <view class="profile-meta">
+          <text class="status-name">{{user.nickname || '游客'}}</text>
+          <text class="status-desc">{{vipInfo.level > 0 ? '你的权益保持在线，继续坚持好习惯' : '升级后更快看见变化：分析更细，建议更准'}}</text>
+        </view>
+      </view>
+      <view class="profile-right">
+        <button class="mini-btn" bindtap="openBenefits">权益总览</button>
+      </view>
+    </view>
+  </view>
+
+  <view class="section">
+    <view class="section-title">核心权益</view>
+    <view class="benefits-grid">
+      <view class="benefit" wx:for="{{benefitCards}}" wx:for-item="benefit" wx:key="key">
+        <view class="dot" style="background: {{benefit.color}};"></view>
+        <text class="benefit-title">{{benefit.title}}</text>
+        <text class="benefit-sub">{{benefit.sub}}</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="section">
+    <view class="section-title">选择套餐</view>
+    <view class="plan-list">
+      <view class="plan {{selectedPlanId === plan.id ? 'active' : ''}}" wx:for="{{plans}}" wx:for-item="plan" wx:key="id" data-id="{{plan.id}}" bindtap="selectPlan">
+        <view class="plan-head">
+          <view class="plan-left">
+            <view class="plan-icon" style="background: {{plan.accent}};"></view>
+            <view class="plan-main">
+              <view class="plan-title-line">
+                <text class="plan-title">{{plan.title}}</text>
+                <view class="tag" wx:if="{{plan.tag}}">{{plan.tag}}</view>
+              </view>
+              <text class="plan-desc">{{plan.desc}}</text>
+            </view>
+          </view>
+
+          <view class="plan-right">
+            <view class="price-line">
+              <text class="price">￥{{plan.price}}</text>
+              <text class="origin" wx:if="{{plan.originPrice}}">￥{{plan.originPrice}}</text>
+            </view>
+            <text class="per">{{plan.per}}</text>
+          </view>
+        </view>
+
+        <view class="plan-highlights" wx:if="{{selectedPlanId === plan.id}}">
+          <view class="pill-row">
+            <view class="mini-pill" wx:for="{{plan.highlights}}" wx:for-item="h" wx:key="*this">{{h}}</view>
+          </view>
+          <view class="plan-more" data-id="{{plan.id}}" catchtap="togglePlanDetail">
+            <text class="plan-more-text">{{planDetailOpen[plan.id] ? '收起套餐特点' : '展开更多套餐特点'}}</text>
+            <text class="plan-more-arrow {{planDetailOpen[plan.id] ? 'up' : ''}}">›</text>
+          </view>
+          <view class="plan-details" wx:if="{{planDetailOpen[plan.id]}}">
+            <view class="detail-line" wx:for="{{plan.details}}" wx:for-item="d" wx:key="*this">
+              <view class="detail-dot" style="background: {{plan.accent}};"></view>
+              <text class="detail-text">{{d}}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <view class="auto-renew" wx:if="{{selectedPlan && selectedPlan.supportAutoRenew}}">
+      <view class="auto-left">
+        <text class="auto-text">自动续费</text>
+        <text class="auto-sub">{{autoRenew ? '到期不断档，随时可关' : '关闭后仍可用至周期结束'}}</text>
+      </view>
+      <switch checked="{{autoRenew}}" color="#10b981" bindchange="toggleAutoRenew" />
+    </view>
+
+    <view class="family-card">
+      <view class="family-top">
+        <view class="family-left">
+          <text class="family-title">家庭账户</text>
+          <text class="family-desc">筹备中：后续支持直系亲属与名额管理</text>
+        </view>
+        <view class="stepper">
+          <view class="step-btn {{familySeats <= 0 ? 'disabled' : ''}}" data-op="minus" bindtap="changeFamilySeats">－</view>
+          <view class="step-value">{{familySeats}}</view>
+          <view class="step-btn {{familySeats >= 7 ? 'disabled' : ''}}" data-op="plus" bindtap="changeFamilySeats">＋</view>
+        </view>
+      </view>
+      <view class="seat-meter">
+        <view class="seat-dot {{idx < familySeats ? 'on' : ''}}" wx:for="{{seatSlots}}" wx:for-item="slot" wx:for-index="idx" wx:key="*this">
+          <view class="seat-inner"></view>
+        </view>
+        <text class="seat-text">已选 {{familySeats}} / 7</text>
+      </view>
+      <view class="family-bottom">
+        <text class="family-fee">加座费用：￥{{familyFee}}/月</text>
+        <text class="family-hint">最多可绑定7位直系亲属</text>
+      </view>
+    </view>
+
+    <view class="agreements">
+      <text class="agreement" bindtap="showServiceAgreement">《会员服务协议》</text>
+      <text class="agreement" bindtap="showAutoRenewRules" wx:if="{{selectedPlan && selectedPlan.supportAutoRenew}}">《自动续费规则》</text>
+      <text class="agreement" bindtap="showPrivacy">《隐私政策》</text>
+    </view>
+  </view>
+
+  <view class="bottom-space"></view>
+
+  <view class="bottom-bar">
+    <view class="bottom-left {{amountPulse ? 'pulse' : ''}}">
+      <text class="bottom-amount">￥{{totalAmount}}/月</text>
+      <text class="bottom-tip">{{vipInfo.level > 0 ? '续费后权益立即延续，不中断' : '支付成功后权益立即生效'}}</text>
+    </view>
+    <button class="buy-btn" bindtap="buyNow">
+      <view class="buy-shine"></view>
+      <text class="buy-text">{{vipInfo.level > 0 ? '立即续费' : '立即开通'}}</text>
+      <text class="buy-sub">{{selectedPlan ? ('解锁 ' + selectedPlan.title + ' 即刻福利') : '立即升级体验'}}</text>
+    </button>
+  </view>
+</view>

@@ -1,0 +1,185 @@
+<view class="login-page">
+  <view class="onboard">
+    <view class="intro-cards">
+      <view class="intro-illustration-stage">
+        <view wx:if="{{svgPrev !== null}}" class="intro-svg-wrap prev {{svgTransitioning ? 'svg-out' : ''}}">
+          <block wx:for="{{svgLayers[svgPrev]}}" wx:for-item="layer" wx:key="src">
+            <image class="intro-svg-layer {{layer.cls}}" src="{{layer.src}}" mode="aspectFit" />
+          </block>
+        </view>
+        <view class="intro-svg-wrap current {{svgTransitioning ? ('svg-in to-' + svgCurrent) : ''}}">
+          <block wx:for="{{svgLayers[svgCurrent]}}" wx:for-item="layer" wx:key="src">
+            <image
+              class="intro-svg-layer {{layer.cls}} {{svgIdle && layer.idleCls ? (layer.idleCls + ' phase-' + svgIdlePhase) : ''}}"
+              src="{{layer.src}}"
+              mode="aspectFit"
+            />
+          </block>
+        </view>
+      </view>
+      <swiper
+        class="intro-swiper"
+        circular="{{false}}"
+        autoplay="{{false}}"
+        duration="{{320}}"
+        current="{{introCurrent}}"
+        easing-function="easeOutCubic"
+        bindchange="onIntroCardChange"
+      >
+        <swiper-item wx:for="{{introCards}}" wx:for-item="item" wx:for-index="index" wx:key="title">
+          <view class="intro-card {{introCurrent === index ? 'active' : ''}}">
+            <text class="intro-title">{{item.title}}</text>
+            <text class="intro-desc">{{item.desc}}</text>
+          </view>
+        </swiper-item>
+      </swiper>
+      <view class="intro-dots">
+        <view wx:for="{{introCards}}" wx:for-index="index" wx:key="index" class="dot {{introCurrent === index ? 'on' : ''}}"></view>
+      </view>
+    </view>
+
+    <view class="onboard-bottom" wx:if="{{!showLogin}}">
+      <button class="primary-cta" bindtap="showLoginForm">开始使用</button>
+    </view>
+  </view>
+
+  <!-- 登录表单（可滑动显示） -->
+  <view class="login-form {{showLogin ? 'show' : 'hide'}} {{isDragging ? 'dragging' : ''}}" 
+        style="transform: translateY({{showLogin ? translateY + 'px' : '100%'}})"
+        bindtouchstart="onLoginTouchStart" 
+        bindtouchmove="onLoginTouchMove" 
+        bindtouchend="onLoginTouchEnd">
+    <view class="form-handle">
+      <view class="handle-bar"></view>
+    </view>
+    
+    <view class="form-header">
+      <view class="skip-btn" bindtap="skipLogin">
+        <text>跳过登录</text>
+      </view>
+      <view class="app-icon">
+        <image src="/static/login/app-icon.png" mode="aspectFit"></image>
+      </view>
+      <text class="welcome-title">欢迎使用</text>
+      <text class="welcome-subtitle">{{loginMode === 'wechat' ? '登录后享受更好的个性化服务体验' : '请绑定手机号以获得更好的服务体验'}}
+      </text>
+    </view>
+
+    <view class="form-content">
+      <!-- 微信登录模式 -->
+      <view wx:if="{{loginMode === 'wechat'}}" class="wechat-login-section">
+        <!-- 微信一键登录按钮 -->
+        <button 
+          class="wechat-login-btn" 
+          bindtap="wechatLogin"
+        >
+          <image src="/static/login/icon-wechat.png" mode="aspectFit"></image>
+          <text>微信一键登录</text>
+        </button>
+
+        <!-- 其他登录方式 -->
+        <view class="other-login">
+          <text class="other-login-text">其他登录方式</text>
+        </view>
+
+        <button class="phone-login-btn" bindtap="switchToPhone">
+          <image src="/static/login/icon-phone.png" mode="aspectFit"></image>
+          <text>手机号登录</text>
+        </button>
+      </view>
+
+      <!-- 手机号登录模式 -->
+      <view wx:else class="phone-login-section">
+        <!-- 手机号输入 -->
+        <view class="input-group">
+          <view class="phone-input">
+            <view class="country-code" bindtap="showCountryPicker">
+              <text>+86</text>
+              <text class="dropdown-icon">▼</text>
+            </view>
+            <input 
+              class="phone-number" 
+              type="number" 
+              placeholder="输入手机号" 
+              value="{{phoneNumber}}"
+              bindinput="onPhoneInput"
+              maxlength="11"
+            />
+          </view>
+        </view>
+
+        <!-- 验证码输入 -->
+        <view class="verification-group">
+          <input 
+            class="verification-input" 
+            type="number" 
+            placeholder="请输入验证码" 
+            value="{{verificationCode}}"
+            bindinput="onVerificationInput"
+            maxlength="6"
+          />
+          <text 
+            class="send-code-btn {{isCountingDown ? 'disabled' : 'active'}}" 
+            bindtap="sendVerificationCode"
+          >
+            {{isCountingDown ? countdown + 's后重发' : '发送验证码'}}
+          </text>
+        </view>
+
+        <!-- 登录按钮 -->
+        <button 
+          class="login-btn {{canLogin ? 'active' : 'disabled'}}" 
+          bindtap="handleLogin"
+          disabled="{{!canLogin}}"
+        >
+          登录
+        </button>
+
+        <!-- 返回微信登录 -->
+        <view class="back-to-wechat" bindtap="switchToWechat">
+          <text class="back-text">返回微信登录</text>
+        </view>
+      </view>
+
+      <!-- 协议同意 -->
+      <view class="agreement">
+        <view class="agreement-links">
+          <text class="agreement-text">
+            我同意 
+            <text class="link" bindtap="showPrivacyPolicy">《隐私保护声明》</text>
+            和
+            <text class="link" bindtap="showUserAgreement">《用户协议》</text>
+          </text>
+        </view>
+        <checkbox-group bindchange="onAgreementChange">
+          <label class="agreement-checkbox">
+            <checkbox value="agree" checked="{{agreed}}" />
+            <text class="checkbox-text">同意</text>
+          </label>
+        </checkbox-group>
+      </view>
+    </view>
+  </view>
+
+  <!-- 完善个人信息弹窗 -->
+  <view class="profile-complete-modal" wx:if="{{showProfileComplete}}" catchtouchmove="true">
+    <view class="modal-content">
+      <view class="modal-title">完善个人信息</view>
+      <view class="modal-desc">为了提供更好的服务，请完善您的头像和昵称</view>
+      
+      <button class="avatar-wrapper" bindtap="handleSyncWechat">
+        <image class="avatar" src="{{userInfo.avatarUrl || '/images/default_avatar.svg'}}" mode="aspectFill"></image>
+        <view class="edit-icon">📷</view>
+      </button>
+
+      <button class="submit-btn" bindtap="handleChooseAvatar" style="margin-top: 16rpx;">从相册/拍照选择头像</button>
+      
+      <view class="input-wrapper">
+        <text class="label">昵称</text>
+        <input type="nickname" class="nickname-input" placeholder="请输入昵称" bind:change="onNicknameChange" bindinput="onNicknameChange" value="{{userInfo.nickname === '微信用户' ? '' : userInfo.nickname}}"/>
+      </view>
+      
+      <button class="submit-btn" bindtap="submitProfile">保存并进入</button>
+    </view>
+  </view>
+</view>

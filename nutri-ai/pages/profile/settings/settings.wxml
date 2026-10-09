@@ -1,0 +1,171 @@
+<view class="page">
+  <view class="top-card">
+    <image class="avatar" src="{{user.avatar}}" mode="aspectFill" />
+    <view class="top-info">
+      <text class="name">{{user.nickname}}</text>
+    </view>
+    <button class="edit-btn" bindtap="openProfileSetup">编辑资料</button>
+  </view>
+
+  <view class="group">
+    <view class="group-title">账号</view>
+    <view class="cell" bindtap="copyUserId">
+      <text class="cell-title">我的ID</text>
+      <view class="cell-right">
+        <text class="cell-value">{{user.id}}</text>
+        <image class="cell-icon" src="/static/profile/copy.png" mode="aspectFit" />
+        <text class="arrow">›</text>
+      </view>
+    </view>
+    <view class="cell cell-multi">
+      <view class="cell-left-col">
+        <text class="cell-title">注销</text>
+        <text class="cell-sub">注销后无法恢复，请谨慎操作</text>
+      </view>
+      <view class="cell-right">
+        <button class="cancel-btn" bindtap="cancelAccount">注销</button>
+        <text class="arrow">›</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="group">
+    <view class="group-title">通用</view>
+    <view class="cell" bindtap="clearCache">
+      <text class="cell-title">清理缓存</text>
+      <view class="cell-right">
+        <text class="cell-value">{{cacheSize}}</text>
+        <text class="arrow">›</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="group">
+    <view class="group-title">通知与体验</view>
+    <view class="cell">
+      <text class="cell-title">消息通知</text>
+      <view class="cell-right">
+        <switch checked="{{notifyEnabled}}" color="#0ea5e9" bindchange="onToggleNotify" />
+        <text class="arrow">›</text>
+      </view>
+    </view>
+    <view class="cell">
+      <text class="cell-title">震动反馈</text>
+      <view class="cell-right">
+        <switch checked="{{hapticEnabled}}" color="#0ea5e9" bindchange="onToggleHaptic" />
+        <text class="arrow">›</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="group">
+    <view class="group-title">系统能力</view>
+    <view class="cell cell-multi">
+      <view class="cell-left-col">
+        <text class="cell-title">说明</text>
+        <text class="cell-sub">这里是服务器侧能力开关，不等同于「消息通知」。不开启时系统不会履约提醒。</text>
+      </view>
+      <view class="cell-right">
+        <text class="arrow">›</text>
+      </view>
+    </view>
+    <view class="cell cell-multi cell-switch">
+      <view class="cell-left-col">
+        <text class="cell-title">系统主动提醒</text>
+        <text class="cell-sub">开启后，系统会按计划自动触发提醒</text>
+      </view>
+      <view class="cell-right">
+        <switch checked="{{capabilityEnabledMap.PROACTIVE_REMINDER}}" color="#0ea5e9" bindchange="onToggleCapability" data-capkey="PROACTIVE_REMINDER" />
+        <text class="arrow">›</text>
+      </view>
+    </view>
+    <view class="cell cell-multi cell-switch">
+      <view class="cell-left-col">
+        <text class="cell-title">用药提醒</text>
+        <text class="cell-sub">开启后，可对用药类事项排队与自动触发</text>
+      </view>
+      <view class="cell-right">
+        <switch checked="{{capabilityEnabledMap.MEDICATION_REMINDER}}" color="#0ea5e9" bindchange="onToggleCapability" data-capkey="MEDICATION_REMINDER" />
+        <text class="arrow">›</text>
+      </view>
+    </view>
+    <view class="cell cell-multi cell-switch">
+      <view class="cell-left-col">
+        <text class="cell-title">补剂/保健品提醒</text>
+        <text class="cell-sub">开启后，可对鱼油、维生素等排队与自动触发</text>
+      </view>
+      <view class="cell-right">
+        <switch checked="{{capabilityEnabledMap.SUPPLEMENT_REMINDER}}" color="#0ea5e9" bindchange="onToggleCapability" data-capkey="SUPPLEMENT_REMINDER" />
+        <text class="arrow">›</text>
+      </view>
+    </view>
+    <view class="cell cell-multi cell-switch">
+      <view class="cell-left-col">
+        <text class="cell-title">日终总结</text>
+        <text class="cell-sub">开启后，系统可生成日终汇总</text>
+      </view>
+      <view class="cell-right">
+        <switch checked="{{capabilityEnabledMap.PROACTIVE_SUMMARY}}" color="#0ea5e9" bindchange="onToggleCapability" data-capkey="PROACTIVE_SUMMARY" />
+        <text class="arrow">›</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="group">
+    <view class="group-title">服务与隐私</view>
+    <view class="cell" bindtap="openPaySettings">
+      <text class="cell-title">支付设置</text>
+      <view class="cell-right">
+        <text class="arrow">›</text>
+      </view>
+    </view>
+    <view class="cell" bindtap="showPrivacySummary">
+      <text class="cell-title">隐私政策摘要</text>
+      <view class="cell-right">
+        <text class="arrow">›</text>
+      </view>
+    </view>
+    <view class="cell" bindtap="showInfoCollectList">
+      <text class="cell-title">个人信息收集清单</text>
+      <view class="cell-right">
+        <text class="arrow">›</text>
+      </view>
+    </view>
+    <view class="cell" bindtap="showInfoShareList">
+      <text class="cell-title">个人信息共享清单</text>
+      <view class="cell-right">
+        <text class="arrow">›</text>
+      </view>
+    </view>
+    <view class="cell" bindtap="contactService">
+      <text class="cell-title">联系客服</text>
+      <view class="cell-right">
+        <text class="arrow">›</text>
+      </view>
+    </view>
+    <view class="cell" bindtap="showAbout">
+      <text class="cell-title">关于 AI 营养师</text>
+      <view class="cell-right">
+        <text class="arrow">›</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="group">
+    <view class="group-title">推荐</view>
+    <view class="cell cell-multi cell-switch">
+      <view class="cell-left-col">
+        <text class="cell-title">个性化推荐</text>
+        <text class="cell-sub">开启后，将为您展示个性化推荐内容</text>
+      </view>
+      <view class="cell-right">
+        <switch checked="{{personalizeEnabled}}" color="#0ea5e9" bindchange="onTogglePersonalize" />
+        <text class="arrow">›</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="danger-zone">
+    <button class="logout-btn" bindtap="logout">退出登录</button>
+  </view>
+</view>

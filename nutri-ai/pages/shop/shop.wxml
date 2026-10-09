@@ -1,0 +1,279 @@
+<proactive-notification id="proactive-notification" />
+<view class="container">
+  <!-- 页面头部 -->
+  <view class="header" style="padding-top: {{statusBarHeight}}px;">
+    <!-- 标题区域，高度对齐胶囊按钮 -->
+    <view class="header-nav" style="height: {{navBarHeight}}px; line-height: {{navBarHeight}}px;">
+      <text class="header-title" style="line-height: {{navBarHeight}}px;">AI-nutri商城</text>
+    </view>
+    
+    <view class="header-content">
+      <text class="header-subtitle">专业营养补充方案</text>
+    </view>
+    
+    <!-- 顶部标签切换 -->
+    <view class="top-tabs">
+      <view 
+        class="tab-item {{activeTab === index ? 'active' : ''}}" 
+        wx:for="{{topTabs}}" 
+        wx:key="index" 
+        bindtap="switchTab" 
+        data-index="{{index}}"
+      >
+        {{item.label}}
+      </view>
+    </view>
+  </view>
+
+  <!-- 主内容区域 -->
+  <view class="main-content">
+    <!-- 自选搭配页面 -->
+    <scroll-view 
+      wx:if="{{activeTab === 0}}" 
+      class="self-select-scroll"
+      scroll-y="true"
+      enhanced="{{true}}"
+      bounces="{{true}}"
+      refresher-enabled="{{true}}"
+      refresher-triggered="{{isRefreshing}}"
+      bindrefresherrefresh="onRefresherRefresh"
+      bindscrolltolower="onLoadMore"
+      lower-threshold="50"
+    >
+      <!-- 分类导航 -->
+      <view class="category-nav-wrapper">
+        <scroll-view class="category-nav" scroll-x="true" show-scrollbar="{{false}}">
+          <view class="category-list">
+            <view 
+              class="category-item {{activeCategory === index ? 'active' : ''}}" 
+              wx:for="{{categories}}" 
+              wx:key="index" 
+              bindtap="switchCategory" 
+              data-index="{{index}}"
+            >
+              <image class="category-icon" src="{{item.icon}}" mode="aspectFit"></image>
+              <text class="category-name">{{item.name}}</text>
+            </view>
+          </view>
+        </scroll-view>
+      </view>
+
+      <!-- 产品列表内容 -->
+      <view class="product-list-content">
+        <view class="section-title">{{activeCategoryName}}</view>
+        <view class="products-grid">
+          <view 
+            class="product-card" 
+            wx:for="{{filteredProducts}}" 
+            wx:key="id" 
+            bindtap="onProductTap"
+            data-product="{{item}}"
+          >
+            <view class="product-image-wrapper">
+              <image class="product-image" src="{{item.image}}" mode="aspectFill"></image>
+            </view>
+            <view class="product-info">
+              <view class="product-name">{{item.name}}</view>
+              <view class="product-desc">{{item.desc}}</view>
+              <view class="product-price-row">
+                <text class="product-price">¥{{item.price}}</text>
+                <text class="product-unit">/瓶</text>
+              </view>
+              <view class="product-spec">{{item.spec}}</view>
+            </view>
+            <view class="add-btn" bindtap="addToCart" data-product="{{item}}">
+              <text class="add-icon">+</text>
+            </view>
+          </view>
+        </view>
+        
+        <!-- 加载状态 -->
+        <view class="loading-state" wx:if="{{isLoadingMore}}">
+          <view class="loading-spinner"></view>
+          <text>正在加载更多商品...</text>
+        </view>
+        <view class="no-more-state" wx:if="{{!hasMore && filteredProducts.length > 0}}">
+          <text>— 没有更多商品了 —</text>
+        </view>
+      </view>
+    </scroll-view>
+
+    <!-- 推荐搭配页面 -->
+    <scroll-view 
+      wx:elif="{{activeTab === 1}}" 
+      class="recommend-page" 
+      scroll-y="true"
+      enhanced="{{true}}"
+      bounces="{{true}}"
+      refresher-enabled="{{true}}"
+      refresher-triggered="{{isRefreshing}}"
+      bindrefresherrefresh="onRefresherRefresh"
+    >
+      <view class="recommend-list">
+        <view 
+          class="combo-card" 
+          wx:for="{{recommendCombos}}" 
+          wx:key="index"
+          bindtap="onComboTap"
+          data-combo="{{item}}"
+        >
+          <view class="combo-bg" style="background-image: url({{item.bgImage}});"></view>
+          <view class="combo-content">
+            <view class="combo-title">{{item.title}}</view>
+            <view class="combo-desc">{{item.desc}}</view>
+            <view class="combo-pills">
+              <image 
+                wx:for="{{item.pills}}" 
+                wx:key="index" 
+                wx:for-item="pill"
+                class="pill-image" 
+                src="{{pill.image}}" 
+                mode="aspectFit"
+              ></image>
+            </view>
+            <view class="combo-footer">
+              <text class="combo-price">¥{{item.price}}</text>
+              <button class="combo-btn" bindtap="addToCart" data-combo="{{item}}">
+                加入购物车
+              </button>
+            </view>
+          </view>
+        </view>
+      </view>
+    </scroll-view>
+
+    <!-- 营养包页面 -->
+    <scroll-view 
+      wx:else 
+      class="nutrition-scroll"
+      scroll-y="true"
+      enhanced="{{true}}"
+      bounces="{{true}}"
+      refresher-enabled="{{true}}"
+      refresher-triggered="{{isRefreshing}}"
+      bindrefresherrefresh="onRefresherRefresh"
+    >
+      <!-- 营养包分类导航 -->
+      <view class="nutrition-nav-wrapper">
+        <scroll-view class="nutrition-nav" scroll-x="true" show-scrollbar="{{false}}">
+          <view class="nutrition-category-list">
+            <view 
+              class="nutrition-category-item {{activeNutritionCategory === index ? 'active' : ''}}" 
+              wx:for="{{nutritionCategories}}" 
+              wx:key="index" 
+              bindtap="switchNutritionCategory" 
+              data-index="{{index}}"
+            >
+              <image class="nutrition-category-icon" src="{{item.icon}}" mode="aspectFit"></image>
+              <text class="nutrition-category-name">{{item.name}}</text>
+            </view>
+          </view>
+        </scroll-view>
+      </view>
+
+      <!-- 营养包内容 -->
+      <view class="nutrition-content-wrapper">
+        <!-- 营养饮品 -->
+        <view wx:if="{{activeNutritionCategory === 0}}" class="drinks-section">
+          <view class="banner">
+            <image class="banner-image" src="../../static/index/drink.png" mode="aspectFill"></image>
+            <view class="banner-overlay">
+              <view class="banner-title">FUNCTIONAL DRINKS</view>
+              <view class="banner-subtitle">营养饮品</view>
+              <view class="banner-tag">30日套装</view>
+            </view>
+          </view>
+
+          <view class="drinks-list">
+            <view 
+              class="drink-card" 
+              wx:for="{{functionalDrinks}}" 
+              wx:key="index"
+              bindtap="onDrinkTap"
+              data-drink="{{item}}"
+            >
+              <image class="drink-image" src="{{item.image}}" mode="aspectFill"></image>
+              <view class="drink-info">
+                <view wx:if="{{index === 0}}" class="special-tag">限时特惠</view>
+                <view class="drink-name">{{item.name}}</view>
+                <view class="drink-desc">{{item.desc}}</view>
+                <view class="drink-price-range">¥{{item.minPrice}} - ¥{{item.maxPrice}}</view>
+                <button class="drink-btn" bindtap="addToCart" data-drink="{{item}}">
+                  选购
+                </button>
+              </view>
+            </view>
+          </view>
+        </view>
+
+        <!-- 30天功能包 -->
+        <view wx:elif="{{activeNutritionCategory === 1}}" class="thirty-day-section">
+          <view class="section-title">30天功能营养包</view>
+          <view class="packs-grid">
+            <view 
+              class="pack-card" 
+              wx:for="{{thirtyDayPacks}}" 
+              wx:key="index"
+              bindtap="onPackTap"
+              data-pack="{{item}}"
+            >
+              <view class="pack-card-content">
+                <image class="pack-image" src="{{item.image}}" mode="aspectFill"></image>
+                <view class="pack-info">
+                  <view class="pack-name">{{item.name}}</view>
+                  <view class="pack-price">{{item.price}}</view>
+                  <view class="pack-desc">{{item.desc}}</view>
+                  <view class="pack-features">
+                    <view class="pack-feature" wx:for="{{item.features}}" wx:key="*this">{{item}}</view>
+                  </view>
+                </view>
+                <view class="pack-action">
+                  <text class="pack-action-icon">+</text>
+                </view>
+              </view>
+            </view>
+          </view>
+        </view>
+
+        <!-- 五天应急包 -->
+        <view wx:else class="emergency-section">
+          <view class="section-title">五天应急营养包</view>
+          <view class="emergency-list">
+            <view 
+              class="emergency-card" 
+              wx:for="{{emergencyPacks}}" 
+              wx:key="index"
+              bindtap="onEmergencyTap"
+              data-emergency="{{item}}"
+            >
+              <image class="emergency-image" src="{{item.image}}" mode="aspectFill"></image>
+              <view class="emergency-info">
+                <view class="emergency-name">{{item.name}}</view>
+                <view class="emergency-desc">{{item.desc}}</view>
+                <view class="emergency-footer">
+                  <text class="emergency-price">¥{{item.price}}</text>
+                  <button class="emergency-btn" bindtap="addToCart" data-emergency="{{item}}">
+                    选购
+                  </button>
+                </view>
+              </view>
+            </view>
+          </view>
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+
+  <!-- 自定义底部导航 -->
+  <custom-tabbar />
+
+  <view class="shop-mask" wx:if="{{maskVisible}}" catchtouchmove="true">
+    <view class="shop-mask-card">
+      <image class="shop-mask-ill" src="/static/index/互动讨论_24.png" mode="aspectFit" />
+      <text class="shop-mask-title">选品筹备中</text>
+      <text class="shop-mask-sub">期待你的建议</text>
+      <button class="shop-mask-btn" bindtap="onSubmitSuggestion">提交建议！</button>
+    </view>
+    <text class="shop-mask-skip" bindtap="onMaskBrowseOnly">仅浏览页面</text>
+  </view>
+</view>

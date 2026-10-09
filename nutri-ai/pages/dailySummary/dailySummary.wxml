@@ -1,0 +1,109 @@
+<view class="page">
+  <view class="tabs">
+    <view class="tabs-row">
+      <view class="tab {{tabIndex === 0 ? 'active' : ''}}" data-index="0" bindtap="onTabTap">
+        <text class="tab-text">我</text>
+        <view class="tab-line"></view>
+      </view>
+      <view class="tab {{tabIndex === 1 ? 'active' : ''}}" data-index="1" bindtap="onTabTap">
+        <text class="tab-text">家人</text>
+        <view class="tab-line"></view>
+      </view>
+    </view>
+  </view>
+
+  <swiper class="content" style="height: {{contentHeightPx}}px;" current="{{tabIndex}}" bindchange="onSwiperChange" duration="220">
+    <swiper-item>
+      <view class="toolbar">
+        <view class="toolbar-left">
+          <view class="picker-chip">
+            <picker mode="date" value="{{pickedDate}}" bindchange="onDatePick">
+              <view class="picker-inner">
+                <text class="picker-label">{{pickedDate ? pickedDate : '选择日期'}}</text>
+              </view>
+            </picker>
+          </view>
+          <view class="reset-chip" bindtap="onResetPick" wx:if="{{pickedDate}}">
+            <text class="reset-text">全部</text>
+          </view>
+        </view>
+        <view class="toolbar-right">
+          <text class="count-text">{{archiveCount}} 份</text>
+        </view>
+      </view>
+
+      <scroll-view
+        class="list"
+        style="height: {{contentHeightPx}}px; padding-bottom: calc(18rpx + {{safeBottomPx}}px);"
+        scroll-y="true"
+        scroll-into-view="{{scrollIntoView}}"
+        scroll-with-animation
+        show-scrollbar="{{false}}"
+      >
+        <view wx:if="{{!archiveItems || !archiveItems.length}}" class="empty">
+          <view class="empty-card">
+            <text class="empty-title">还没有档案</text>
+            <text class="empty-sub">每天 22:00 的日终汇总会自动归档在这里</text>
+          </view>
+        </view>
+
+        <block wx:for="{{archiveItems}}" wx:key="date" wx:for-item="it">
+          <view wx:if="{{it.showMonthHeader}}" class="month-header">
+            <text class="month-title">{{it.monthTitle}}</text>
+          </view>
+
+          <view class="archive-card {{pickedDate && pickedDate === it.date ? 'active' : ''}}" id="d-{{it.date}}" data-date="{{it.date}}" bindtap="onCardTap">
+            <view class="archive-top">
+              <view class="date-badge">
+                <text class="date-main">{{it.day}}</text>
+                <text class="date-sub">{{it.weekday}}</text>
+              </view>
+              <view class="archive-meta">
+                <text class="archive-date">{{it.date}}</text>
+                <text class="archive-time">{{it.timeText}}</text>
+              </view>
+              <text class="archive-arrow">›</text>
+            </view>
+            <view class="archive-body">
+              <text class="archive-preview">{{it.preview}}</text>
+            </view>
+          </view>
+        </block>
+      </scroll-view>
+    </swiper-item>
+
+    <swiper-item>
+      <scroll-view class="list" style="height: {{contentHeightPx}}px; padding-bottom: calc(18rpx + {{safeBottomPx}}px);" scroll-y="true">
+        <view class="empty">
+          <view class="empty-card">
+            <text class="empty-title">家人档案</text>
+            <text class="empty-sub">先把“我”的档案做好，家人联动下一步补齐</text>
+          </view>
+        </view>
+      </scroll-view>
+    </swiper-item>
+  </swiper>
+
+  <view class="detail-mask" wx:if="{{detailOpen}}" bindtap="onDetailClose">
+    <view class="detail-panel" catchtap="noop">
+      <view class="detail-head">
+        <view class="detail-head-left">
+          <text class="detail-title">日终汇总</text>
+          <text class="detail-date">{{detailItem.date}}</text>
+        </view>
+        <view class="detail-actions">
+          <view class="detail-btn" bindtap="onDetailCopy">
+            <text class="detail-btn-text">复制</text>
+          </view>
+          <view class="detail-btn ghost" bindtap="onDetailClose">
+            <text class="detail-btn-text">关闭</text>
+          </view>
+        </view>
+      </view>
+      <scroll-view class="detail-body" scroll-y="true">
+        <text class="detail-text">{{detailItem.text}}</text>
+      </scroll-view>
+    </view>
+  </view>
+</view>
+

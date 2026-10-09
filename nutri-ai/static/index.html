@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="format-detection" content="telephone=no">
+  <link rel="manifest" href="/manifest.json">  <!-- PWA manifest链接 -->
+  <title>Ai营养师</title>  <!-- 静态标题；或用 Vite define: { __TITLE__: 'Ai营养师' } 在 config 注入 -->
+  <!-- Uni-app自动注入CSS/JS -->
+</head>
+<body>
+  <noscript>您的浏览器不支持 JavaScript</noscript>
+  <div id="app"></div>
+  <script>
+    // 注册SW（开发/生产通用，但 dev 只注册避免热更新冲突）
+    if ('serviceWorker' in navigator && (process.env.NODE_ENV === 'development' || location.protocol === 'https:')) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then((registration) => {
+            console.log('SW注册成功，scope:', registration.scope);
+          })
+          .catch((error) => {
+            console.error('SW注册失败:', error);
+          });
+      });
+    }
+  </script>
+</body>
+</html>

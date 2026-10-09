@@ -1,0 +1,354 @@
+<proactive-notification id="proactive-notification" />
+<view class="page-container">
+  <!-- 动态粒子背景 -->
+  <canvas canvas-id="particleCanvas" id="particleCanvas" class="particle-canvas"></canvas>
+
+  <!-- 顶部导航栏 -->
+  <view class="navbar" style="padding-top: {{statusBarHeight}}px">
+    <view class="navbar-content">
+      <view class="nav-btn" bindtap="goBack">
+        <text class="icon-text">←</text>
+      </view>
+      <view class="nav-title">
+        <text class="organ-name">{{organ.name}}</text>
+        <text class="organ-subtitle">健康档案</text>
+      </view>
+      <view class="nav-btn" bindtap="shareOrgan">
+        <text class="icon-text">↗</text>
+      </view>
+    </view>
+  </view>
+  <view style="height: {{navBarHeight}}px"></view>
+
+  <!-- 主内容区域 -->
+  <scroll-view class="main-scroll" scroll-y="true" enable-back-to-top="{{false}}" bindscroll="onScroll" style="height: calc(100vh - {{navBarHeight}}px);">
+    <view class="organ-selector">
+      <scroll-view class="organ-tabs" scroll-x="true" show-scrollbar="false">
+        <view class="organ-tabs-row">
+          <view
+            class="organ-tab {{item.key === regionKey ? 'active' : ''}}"
+            wx:for="{{organTabs}}"
+            wx:key="key"
+            bindtap="onOrganTap"
+            data-key="{{item.key}}"
+          >
+            <view class="organ-tab-icon {{item.scoreClass}}">
+              <text class="organ-tab-emoji">{{item.emoji}}</text>
+            </view>
+            <view class="organ-tab-text">
+              <text class="organ-tab-name">{{item.name}}</text>
+              <text class="organ-tab-score">{{item.score}}</text>
+            </view>
+          </view>
+        </view>
+      </scroll-view>
+    </view>
+
+    <!-- 器官健康评分大卡片 -->
+    <view class="hero-card {{cardAnimated ? 'card-animate' : ''}}">
+      <view class="hero-bg">
+        <view class="circle-decoration circle-1"></view>
+        <view class="circle-decoration circle-2"></view>
+        <view class="circle-decoration circle-3"></view>
+      </view>
+      
+      <view class="hero-content">
+        <!-- 3D 圆环评分 -->
+        <view class="score-section">
+          <view class="score-ring {{scoreClass}}">
+            <canvas canvas-id="ringCanvas" class="ring-svg" style="width: 120px; height: 120px;"></canvas>
+            <view class="score-center">
+              <text class="score-number">{{organ.score}}</text>
+              <text class="score-label">健康分</text>
+            </view>
+          </view>
+          
+          <view class="score-info">
+            <view class="status-badge {{scoreClass}}">
+              <view class="badge-dot"></view>
+              <text>{{statusText}}</text>
+            </view>
+            <text class="score-summary">{{organ.summary}}</text>
+            <text class="diet-impact" wx:if="{{dietImpactText}}">{{dietImpactText}}</text>
+          </view>
+        </view>
+
+        <!-- 快速指标 -->
+        <view class="quick-stats">
+          <view 
+            class="stat-item" 
+            wx:for="{{organ.metrics.slice(0, 3)}}" 
+            wx:key="index"
+            style="animation-delay: {{index * 0.1}}s"
+          >
+            <view class="stat-icon stat-icon-{{index + 1}}">
+              <text class="stat-emoji">{{getMetricEmoji(item.name)}}</text>
+            </view>
+            <view class="stat-content">
+              <text class="stat-name">{{item.name}}</text>
+              <text class="stat-value">{{item.value}}{{item.unit || ''}}</text>
+            </view>
+            <view class="stat-trend {{getTrendClass(item.status)}}">
+              <text class="trend-icon">{{item.status === 'good' ? '↗' : item.status === 'bad' ? '↘' : '→'}}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 器官简介卡片 -->
+    <view class="info-card slide-up" style="animation-delay: 0.2s">
+      <view class="card-header-simple">
+        <view class="header-icon">
+          <text class="icon-emoji">📖</text>
+        </view>
+        <text class="header-title">器官简介</text>
+      </view>
+      <view class="intro-content">
+        <view class="intro-visual">
+          <view class="organ-illustration {{organ.key}}-illustration">
+            <text class="organ-icon">{{organEmoji}}</text>
+          </view>
+        </view>
+        <text class="intro-text">{{organ.intro}}</text>
+      </view>
+    </view>
+
+    <!-- 健康趋势卡片 -->
+    <view class="trend-card slide-up" style="animation-delay: 0.3s">
+      <view class="card-header-simple">
+        <view class="header-icon">
+          <text class="icon-emoji">📈</text>
+        </view>
+        <text class="header-title">7日健康趋势</text>
+        <view class="header-action" bindtap="refreshMetrics">
+          <text class="icon-text">🔄</text>
+        </view>
+      </view>
+      
+      <view class="trend-content">
+        <canvas canvas-id="trendChart" id="trendChart" class="trend-canvas"></canvas>
+        
+        <view class="trend-labels">
+          <view class="trend-label-item">
+            <view class="label-dot dot-min"></view>
+            <text class="label-text">最低 {{trendMin}}</text>
+          </view>
+          <view class="trend-label-item">
+            <view class="label-dot dot-avg"></view>
+            <text class="label-text">平均 {{trendAvg}}</text>
+          </view>
+          <view class="trend-label-item">
+            <view class="label-dot dot-max"></view>
+            <text class="label-text">最高 {{trendMax}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 每日小贴士 -->
+    <view class="tip-card slide-up" style="animation-delay: 0.4s">
+      <view class="tip-icon-large">💡</view>
+      <view class="tip-content">
+        <text class="tip-title">今日健康小贴士</text>
+        <text class="tip-text">{{organ.dailyTip}}</text>
+      </view>
+    </view>
+
+    <!-- 详细指标卡片 -->
+    <view class="metrics-card slide-up" style="animation-delay: 0.5s">
+      <view class="card-header-simple">
+        <view class="header-icon">
+          <text class="icon-emoji">🔬</text>
+        </view>
+        <text class="header-title">详细指标</text>
+      </view>
+      
+      <view class="metrics-list">
+        <view 
+          class="metric-item" 
+          wx:for="{{organ.metrics}}" 
+          wx:key="index"
+          bindtap="toggleMetric"
+          data-idx="{{index}}"
+        >
+          <view class="metric-main">
+            <view class="metric-header">
+              <view class="metric-title-row">
+                <text class="metric-name">{{item.name}}</text>
+                <view class="metric-status-dot status-{{item.status}}"></view>
+              </view>
+              <text class="metric-value-large">{{item.value}}{{item.unit || ''}}</text>
+            </view>
+            
+            <view class="metric-progress">
+              <view class="progress-track">
+                <view 
+                  class="progress-fill fill-{{item.status}}"
+                  style="width: {{item.percentage}}%;"
+                >
+                  <view class="progress-shine"></view>
+                </view>
+              </view>
+              <text class="progress-text">{{item.percentage}}%</text>
+            </view>
+          </view>
+          
+          <view class="metric-expand" wx:if="{{expandedMetric === index}}">
+            <view class="expand-content">
+              <text class="expand-label">指标说明</text>
+              <text class="expand-text">{{item.detail}}</text>
+              
+              <view class="expand-actions">
+                <button class="action-btn primary-action" bindtap="applyAdvice" data-metric="{{item}}">
+                  <text class="action-icon">✓</text>
+                  <text>采纳建议</text>
+                </button>
+                <button class="action-btn secondary-action" bindtap="compareStandard" data-metric="{{item}}">
+                  <text class="action-icon">📊</text>
+                  <text>查看标准</text>
+                </button>
+              </view>
+            </view>
+          </view>
+          
+          <view class="metric-toggle">
+            <text class="toggle-icon">{{expandedMetric === index ? '▲' : '▼'}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 改善建议卡片 -->
+    <view class="suggestions-card slide-up" style="animation-delay: 0.6s">
+      <view class="card-header-simple">
+        <view class="header-icon">
+          <text class="icon-emoji">💊</text>
+        </view>
+        <text class="header-title">改善建议</text>
+      </view>
+      
+      <view class="suggestions-list">
+        <view 
+          class="suggestion-item" 
+          wx:for="{{organ.suggestions}}" 
+          wx:key="index"
+          bindtap="applySuggestion"
+          data-suggestion="{{item}}"
+        >
+          <view class="suggestion-badge {{item.type}}-badge">
+            <text class="badge-emoji">{{getSuggestionEmoji(item.type)}}</text>
+          </view>
+          <view class="suggestion-content">
+            <text class="suggestion-title">{{item.title}}</text>
+            <text class="suggestion-desc">{{item.description}}</text>
+          </view>
+          <view class="suggestion-arrow">
+            <text class="arrow-icon">→</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 推荐食物卡片 -->
+    <view class="foods-card slide-up" style="animation-delay: 0.7s">
+      <view class="card-header-simple">
+        <view class="header-icon">
+          <text class="icon-emoji">🥗</text>
+        </view>
+        <text class="header-title">推荐食物</text>
+      </view>
+      
+      <scroll-view class="foods-scroll" scroll-x="true" show-scrollbar="false">
+        <view class="foods-list">
+          <view 
+            class="food-card" 
+            wx:for="{{organ.recommendations}}" 
+            wx:key="index"
+            bindtap="showFoodDetail"
+            data-food="{{item}}"
+          >
+            <view class="food-image-wrapper">
+              <image src="{{item.img}}" class="food-image" mode="aspectFill"></image>
+              <view class="food-overlay"></view>
+            </view>
+            <view class="food-info">
+              <text class="food-name">{{item.name}}</text>
+              <text class="food-benefit">{{item.note}}</text>
+            </view>
+          </view>
+        </view>
+      </scroll-view>
+    </view>
+
+    <!-- AI 个性化计划 -->
+    <view class="ai-card slide-up" style="animation-delay: 0.8s">
+      <view class="ai-header">
+        <view class="ai-icon-wrapper">
+          <text class="ai-icon">🤖</text>
+          <view class="ai-pulse"></view>
+        </view>
+        <view class="ai-title-section">
+          <text class="ai-title">AI 个性化计划</text>
+          <text class="ai-subtitle">基于您的健康数据生成</text>
+        </view>
+      </view>
+      
+      <view class="ai-content">
+        <text class="ai-plan-text">{{organ.aiPlan}}</text>
+      </view>
+      
+      <button class="ai-generate-btn" bindtap="generateAIPlan">
+        <view class="btn-shine"></view>
+        <text class="refresh-icon">🔄</text>
+        <text>生成新计划</text>
+      </button>
+    </view>
+
+    <!-- 成就徽章 -->
+    <view class="achievements-card slide-up" style="animation-delay: 0.9s">
+      <view class="card-header-simple">
+        <view class="header-icon">
+          <text class="icon-emoji">🏆</text>
+        </view>
+        <text class="header-title">解锁成就</text>
+      </view>
+      
+      <view class="achievements-grid">
+        <view 
+          class="achievement-badge" 
+          wx:for="{{organ.achievements}}" 
+          wx:key="index"
+        >
+          <view class="badge-icon">
+            <text class="trophy-icon">🏆</text>
+          </view>
+          <text class="badge-text">{{item}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 底部操作栏 -->
+    <view class="footer-actions slide-up" style="animation-delay: 1s">
+      <button class="footer-btn primary-btn" bindtap="saveRecord">
+        <text class="btn-icon">➕</text>
+        <text>记录状态</text>
+      </button>
+      <button class="footer-btn secondary-btn" bindtap="exportData">
+        <text class="btn-icon">📥</text>
+        <text>导出数据</text>
+      </button>
+    </view>
+
+    <!-- 底部安全区域 -->
+    <view class="safe-bottom" style="height: {{safeAreaBottom}}px"></view>
+  </scroll-view>
+
+  <!-- 成功动画遮罩 -->
+  <view class="success-overlay" wx:if="{{showSuccess}}">
+    <view class="success-content">
+      <view class="success-icon">✓</view>
+      <text class="success-text">{{successMessage}}</text>
+    </view>
+  </view>
+</view>

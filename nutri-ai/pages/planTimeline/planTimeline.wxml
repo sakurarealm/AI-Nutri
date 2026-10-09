@@ -1,0 +1,88 @@
+<view class="page">
+  <view class="bg">
+    <view class="bg-orb orb1"></view>
+    <view class="bg-orb orb2"></view>
+    <view class="bg-orb orb3"></view>
+  </view>
+
+  <view class="header">
+    <view class="title-row">
+      <text class="title">今日计划表</text>
+      <text class="date">{{dateText}}</text>
+    </view>
+  </view>
+
+  <scroll-view
+    class="list"
+    scroll-y
+    enhanced="{{true}}"
+    bounces="{{false}}"
+    show-scrollbar="{{false}}"
+    refresher-enabled="{{false}}"
+  >
+    <view class="list-inner">
+      <view class="summary-card">
+        <view class="summary-head">
+          <text class="summary-title">今日概览</text>
+        </view>
+        <view wx:if="{{planSummary && planSummary.length}}" class="summary-chips">
+          <view
+            wx:for="{{planSummary}}"
+            wx:key="*this"
+            class="summary-chip"
+            bindtap="onSummaryChipTap"
+            data-text="{{item}}"
+          >
+            <text class="summary-chip-text">{{item}}</text>
+          </view>
+        </view>
+        <text wx:else class="summary-empty">暂无可展示的今日计划</text>
+      </view>
+
+      <view wx:if="{{!items || !items.length}}" class="empty">
+        <text class="empty-text">暂无计划</text>
+        <button class="refresh-btn" bindtap="reload">刷新</button>
+      </view>
+
+      <view wx:if="{{items && items.length}}" class="timeline-section">
+        <text class="timeline-title">今日时间轴</text>
+        <text class="timeline-sub">把今天的安排串起来，看起来更有节奏</text>
+        <view class="timeline-list">
+          <view
+            class="timeline-item {{it.kind === 'SUMMARY' ? 'ai' : it.kindLabel ? 'system' : 'anon'}}"
+            wx:for="{{items}}"
+            wx:key="rowKey"
+            wx:for-item="it"
+          >
+            <view class="card {{it.kind === 'SUMMARY' ? 'ai' : it.kindLabel ? 'system' : 'anon'}}">
+              <view class="card-header">
+                <text class="card-time">{{it.time}}</text>
+                <text class="card-badge">{{it.kindLabel || '系统'}}</text>
+                <text class="card-status {{it.statusClass}}">{{it.statusLabel}}</text>
+              </view>
+              <text class="card-title">{{it.title}}</text>
+              <text class="card-desc">{{it.subTitle || ' '}}</text>
+              <view class="kv-list">
+                <view class="kv">
+                  <text class="k">状态：</text>
+                  <text class="v">{{it.statusLabel}}</text>
+                </view>
+                <view wx:if="{{it.decisionKey}}" class="kv">
+                  <text class="k">编号：</text>
+                  <text class="v">{{it.decisionKey}}</text>
+                </view>
+              </view>
+              <view wx:if="{{it.showActions}}" class="card-actions">
+                <button wx:if="{{it.showComplete}}" class="card-btn primary" bindtap="onComplete" data-decisionkey="{{it.decisionKey}}">完成</button>
+                <button wx:if="{{it.showSkipToday}}" class="card-btn" bindtap="onSkipToday" data-decisionkey="{{it.decisionKey}}">跳过</button>
+                <button wx:if="{{it.showDisable}}" class="card-btn danger" bindtap="onDisable" data-decisionkey="{{it.decisionKey}}">关闭</button>
+              </view>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <view class="bottom-space"></view>
+    </view>
+  </scroll-view>
+</view>

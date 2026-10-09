@@ -1,0 +1,4 @@
+<view class="glass-button {{type}} {{customClass}}" bindtap="onTap">
+  <image wx:if="{{icon}}" class="button-icon" src="{{icon}}" />
+  <view wx:else class="default-icon"></view>
+</view>

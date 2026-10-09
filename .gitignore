@@ -1,0 +1,36 @@
+# 本地备份的子仓库 .git（Gitee 历史备份，不上传）
+.git-backup/
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-error.log*
+.pnpm-store/
+
+# Java / Maven
+target/
+*.class
+*.jar
+*.war
+.mvn/wrapper/maven-wrapper.jar
+!.mvn/wrapper/maven-wrapper.properties
+
+# IDE / Editor
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+.settings/
+.project
+.classpath
+
+# Office 临时文件
+~$*
+
+# 日志 & 运行时
+*.log
+logs/
+.DS_Store
+Thumbs.db
+.env.local

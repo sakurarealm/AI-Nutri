@@ -1,0 +1,63 @@
+page {
+  background: #000000;
+}
+
+.student-page {
+  width: 100%;
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+}
+
+.bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+
+.bottom-wrap {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  padding: 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.verify-shell {
+  width: 100%;
+  padding: 22rpx 14rpx calc(18rpx + constant(safe-area-inset-bottom));
+  padding: 22rpx 14rpx calc(18rpx + env(safe-area-inset-bottom));
+  border-radius: 32rpx 32rpx 0 0;
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 -16rpx 70rpx rgba(15, 23, 42, 0.18);
+  backdrop-filter: blur(14rpx);
+  -webkit-backdrop-filter: blur(14rpx);
+  box-sizing: border-box;
+}
+
+.verify-btn {
+  width: 100%;
+  height: 92rpx;
+  border-radius: 50rpx;
+  background: linear-gradient(135deg, #14b8a6 0%, #0ea5e9 100%);
+  border: 2rpx solid rgba(255, 255, 255, 0.45);
+  box-shadow: 0 20rpx 70rpx rgba(14, 165, 233, 0.34);
+  color: #ffffff;
+  font-size: 32rpx;
+  font-weight: 950;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  box-sizing: border-box;
+}
+
+.verify-btn::after {
+  border: none;
+}

@@ -1,0 +1,41 @@
+{
+  "name": "ai-nutri-wxmini",
+  "version": "1.0.0",
+  "description": "AI营养师微信小程序",
+  "main": "app.js",
+  "scripts": {
+    "dev": "echo '微信小程序开发模式启动' && echo '请在微信开发者工具中打开此项目目录进行预览和调试'",
+    "build": "echo '微信小程序构建完成'",
+    "test": "echo '测试脚本'"
+  },
+  "keywords": [
+    "wechat",
+    "miniprogram",
+    "ai",
+    "nutrition",
+    "three.js"
+  ],
+  "author": "AI Nutri Team",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/three": "^0.158.0"
+  },
+  "dependencies": {
+    "dhtml-weixin": "^15.0.1",
+    "three": "^0.158.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/your-repo/ai-nutri-wxmini.git"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "directories": {
+    "lib": "lib"
+  },
+  "bugs": {
+    "url": "https://github.com/your-repo/ai-nutri-wxmini/issues"
+  },
+  "homepage": "https://github.com/your-repo/ai-nutri-wxmini#readme"
+}

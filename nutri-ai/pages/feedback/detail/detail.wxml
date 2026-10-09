@@ -1,0 +1,59 @@
+<view class="page">
+  <view class="banner">
+    <text class="banner-text">此投诉为本小程序自有投诉渠道，非微信官方投诉渠道</text>
+  </view>
+
+  <view class="card">
+    <view class="row">
+      <text class="label">反馈主题：</text>
+      <text class="value">{{subject}}</text>
+    </view>
+
+    <view class="row row-stars">
+      <text class="label">服务评价</text>
+      <view class="stars" role="button" aria-label="服务评价">
+        <text
+          wx:for="{{stars}}"
+          wx:key="value"
+          class="star {{rating >= item ? 'on' : ''}}"
+          data-value="{{item}}"
+          bindtap="onStarTap"
+        >★</text>
+      </view>
+    </view>
+
+    <view class="input-wrap">
+      <textarea
+        class="textarea"
+        placeholder="请简要描述您的问题或建议"
+        value="{{content}}"
+        maxlength="500"
+        auto-height
+        show-confirm-bar="{{false}}"
+        bindinput="onContentInput"
+      />
+      <text class="count">{{content.length}}/500</text>
+    </view>
+
+    <view class="divider">
+      <view class="divider-line"></view>
+      <text class="divider-text">补充信息（选填）</text>
+      <view class="divider-line"></view>
+    </view>
+
+    <view class="picker-row">
+      <text class="picker-label">选择订单</text>
+      <picker mode="selector" range="{{orderOptions}}" range-key="label" value="{{orderIndex}}" bindchange="onOrderChange">
+        <view class="picker-value">
+          <text class="picker-text">{{orderOptions[orderIndex].label}}</text>
+          <text class="arrow">›</text>
+        </view>
+      </picker>
+    </view>
+
+    <button class="submit-btn {{canSubmit ? 'on' : 'off'}}" disabled="{{!canSubmit}}" bindtap="onSubmit">
+      提交反馈
+    </button>
+  </view>
+</view>
+

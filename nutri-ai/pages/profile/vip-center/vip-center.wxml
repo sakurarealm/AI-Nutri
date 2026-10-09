@@ -1,0 +1,153 @@
+<view class="page">
+  <view class="hero">
+    <view class="hero-bg">
+      <view class="orb orb1"></view>
+      <view class="orb orb2"></view>
+      <view class="shine"></view>
+    </view>
+
+    <view class="hero-top">
+      <view class="hero-left">
+        <text class="greeting">{{greeting}}</text>
+        <text class="subtitle">{{subtitle}}</text>
+      </view>
+      <view class="badge {{vipInfo.level > 0 ? 'vip' : 'normal'}}">
+        <text class="badge-text">{{vipInfo.level > 0 ? vipInfo.levelName : '未开通'}}</text>
+      </view>
+    </view>
+
+    <view class="profile-card">
+      <view class="profile-left">
+        <view class="avatar">
+          <text class="avatar-text">{{avatarInitial}}</text>
+        </view>
+        <view class="profile-meta">
+          <text class="name">{{nickname}}</text>
+          <text class="meta">{{vipMeta}}</text>
+        </view>
+      </view>
+      <view class="profile-right">
+        <button class="ghost-btn" bindtap="goToPay">{{ctaTop}}</button>
+      </view>
+    </view>
+  </view>
+
+  <view class="section">
+    <view class="section-head">
+      <text class="section-title">专属健康档案</text>
+      <text class="section-link" bindtap="openHealthFile">{{healthLinkText}}</text>
+    </view>
+
+    <view class="card health-card">
+      <view class="health-row">
+        <view class="health-left">
+          <text class="health-title">{{healthTitle}}</text>
+          <text class="health-sub">{{healthSub}}</text>
+        </view>
+        <view class="health-right">
+          <text class="health-level">{{healthLevelText}}</text>
+        </view>
+      </view>
+
+      <view class="progress-wrap">
+        <view class="progress-track">
+          <view class="progress-bar" style="width: {{progressPercent}}%;"></view>
+        </view>
+        <text class="progress-text">{{progressText}}</text>
+      </view>
+
+      <view class="goal-grid">
+        <view class="goal" wx:for="{{goals}}" wx:for-item="g" wx:key="key">
+          <text class="goal-value">{{g.value}}</text>
+          <text class="goal-label">{{g.label}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="section">
+    <view class="section-head">
+      <text class="section-title">今日定制方案</text>
+      <text class="section-subtitle">{{planHint}}</text>
+    </view>
+
+    <view class="card plan-card">
+      <view class="plan-top">
+        <view class="plan-left">
+          <text class="plan-title">{{planTitle}}</text>
+          <text class="plan-sub">{{planSub}}</text>
+        </view>
+        <view class="plan-right">
+          <view class="plan-chip">{{planChip}}</view>
+        </view>
+      </view>
+      <view class="plan-list">
+        <view class="plan-item" wx:for="{{planItems}}" wx:for-item="p" wx:key="key">
+          <view class="plan-dot" style="background: {{p.color}};"></view>
+          <view class="plan-texts">
+            <text class="plan-item-title">{{p.title}}</text>
+            <text class="plan-item-sub">{{p.sub}}</text>
+          </view>
+          <text class="plan-item-tag">{{p.tag}}</text>
+        </view>
+      </view>
+      <view class="plan-actions">
+        <button class="primary-btn" bindtap="openPlan">{{planAction}}</button>
+        <button class="secondary-btn" bindtap="goToPay">{{planPayAction}}</button>
+      </view>
+    </view>
+  </view>
+
+  <view class="section">
+    <view class="section-head">
+      <text class="section-title">进度与成就</text>
+      <text class="section-link" bindtap="openAchievements">查看全部</text>
+    </view>
+    <scroll-view class="achievements" scroll-x="true" show-scrollbar="false">
+      <view class="ach-row">
+        <view class="ach-card {{a.unlocked ? 'on' : ''}}" wx:for="{{achievements}}" wx:for-item="a" wx:key="key">
+          <text class="ach-title">{{a.title}}</text>
+          <text class="ach-sub">{{a.sub}}</text>
+          <view class="ach-pill">{{a.pill}}</view>
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+
+  <view class="section">
+    <view class="section-head">
+      <text class="section-title">专属推荐</text>
+      <text class="section-subtitle">{{recHint}}</text>
+    </view>
+    <view class="rec-list">
+      <view class="card rec-card" wx:for="{{recommendations}}" wx:for-item="r" wx:key="key" data-key="{{r.key}}" bindtap="openRecommendation">
+        <view class="rec-left">
+          <view class="rec-icon" style="background: {{r.color}};"></view>
+          <view class="rec-texts">
+            <text class="rec-title">{{r.title}}</text>
+            <text class="rec-sub">{{r.sub}}</text>
+          </view>
+        </view>
+        <view class="rec-right">
+          <text class="rec-action">{{r.action}}</text>
+          <text class="rec-arrow">›</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="bottom-space"></view>
+
+  <view class="bottom-bar">
+    <view class="bottom-left">
+      <text class="bottom-title">{{bottomTitle}}</text>
+      <text class="bottom-sub">{{bottomSub}}</text>
+    </view>
+    <button class="cta-btn" bindtap="goToPay">
+      <view class="cta-shine"></view>
+      <text class="cta-text">{{ctaBottom}}</text>
+      <text class="cta-sub">{{ctaBottomSub}}</text>
+    </button>
+  </view>
+</view>
+

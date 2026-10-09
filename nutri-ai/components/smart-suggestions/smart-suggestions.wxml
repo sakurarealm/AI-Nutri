@@ -1,0 +1,27 @@
+<view class="smart-container" wx:if="{{visible}}">
+  <view class="chips-drawer {{expanded ? 'open' : ''}}">
+    <view class="chips-inner">
+      <view
+        wx:for="{{suggestions}}"
+        wx:key="*this"
+        wx:for-item="s"
+        wx:for-index="i"
+        class="suggestion-chip chip-{{i}}"
+        style="transition-delay: {{expanded ? i * 0.06 : (4 - i) * 0.04}}s;"
+        bindtap="onSuggestionTap"
+        data-text="{{s}}"
+      >
+        <text class="chip-text">{{s}}</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="orb-wrapper" bindtap="onOrbTap">
+    <view class="orb-glow glow-1"></view>
+    <view class="orb-glow glow-2"></view>
+    <view class="orb-glow glow-3"></view>
+    <view class="orb-core {{expanded ? 'active' : ''}}">
+      <text class="orb-icon">{{expanded ? '✕' : '✦'}}</text>
+    </view>
+  </view>
+</view>

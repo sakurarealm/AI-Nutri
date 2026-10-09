@@ -1,0 +1,174 @@
+|   AiHeathAgentApplication.java
+|   project_java_tree.txt
+|       ApiResp.java
+|       BizEx.java
+|       ErrorCode.java
+|       GlobalExceptionHandler.java
+|       CorsConfig.java
+|       DataSeeder.java
+|       JwtProps.java
+|       PasswordConfig.java
+|       RestTemplateConfig.java
+|       SecurityConfig.java
+|       AuthController.java
+|       BaseController.java
+|       ChatController.java
+|       HealthController.java
+|       PayController.java
+|       RechargeController.java
+|       RefundController.java
+|       SpendController.java
+|       SystemController.java
+|       UserController.java
+|       UserRuntimeStateController.java
+|       WalletController.java
+|   |       DeepSeekChatClient.java
+|   |       ExplanationCode.java
+|   |       SystemMessageType.java
+|   |       SystemStateSnapshot.java
+|   |       ClinicalDatum.java
+|   |       ClinicalSummary.java
+|   |       ConversationInput.java
+|   |       ConversationMessage.java
+|   |       ConversationRole.java
+|   |       DailyPlan.java
+|   |       DailySummary.java
+|   |       DecisionActionType.java
+|   |       DecisionResult.java
+|   |       ExerciseStrategy.java
+|   |       InputModality.java
+|   |       MealStrategy.java
+|   |       MessageChannel.java
+|   |       MessageContent.java
+|   |       MessageContentType.java
+|   |       PlanAction.java
+|   |       PlanResult.java
+|   |       ReminderItem.java
+|   |       TimeSlot.java
+|   |       UserEvent.java
+|   |       UserEventTopic.java
+|   |       UserEventType.java
+|   |       DefaultPromptProvider.java
+|   |       Prompt.java
+|   |       PromptProvider.java
+|   |       PromptRole.java
+|           CompanionChatService.java
+|           ConversationHistoryQueryService.java
+|           ConversationOrchestratorService.java
+|           DailyPlanSchedulerService.java
+|           DailyPlanService.java
+|           EventDetectService.java
+|           FoodVisionEventAdapterService.java
+|           HealthDecisionService.java
+|           PlanGenerateService.java
+|           ProactiveSchedulerService.java
+|           ProactiveTouchService.java
+|           ReminderComposeService.java
+|           ReminderTriggerService.java
+|           RuleBasedEventDetectService.java
+|           SummaryReportService.java
+|           SystemMessageMetaService.java
+|           TimeSlotTriggerService.java
+|           UserCapabilityCommandService.java
+|           UserRuntimeStateQueryService.java
+|           UserStateQueryService.java
+|   |   ChatRequest.java
+|   |   ChatResponse.java
+|   |       CreateOrderReq.java
+|   |       LoginReq.java
+|   |       ProfileUpdateReq.java
+|   |       RecordCreateReq.java
+|   |       RecordUpdateReq.java
+|   |       RedeemReq.java
+|   |       RefundReq.java
+|   |       RegisterReq.java
+|   |       ResetPwdReq.java
+|   |       SendCodeReq.java
+|   |       SmsLoginReq.java
+|   |       SpendReq.java
+|   |       UpdateProfileReq.java
+|   |       WechatLoginReq.java
+|           CreateOrderResp.java
+|           HealthOverviewResp.java
+|           MeResp.java
+|           PageResp.java
+|           ProfileResp.java
+|           RechargePackageResp.java
+|           RecordItemResp.java
+|           RefundResp.java
+|           SpendResp.java
+|           TokenPair.java
+|           TxItemResp.java
+|           WalletOverviewResp.java
+|           WeightTrendResp.java
+|       AuthRefreshToken.java
+|       CapabilityKey.java
+|       CapabilityState.java
+|       ConversationRecord.java
+|       DailyPlanRecord.java
+|       DailySummaryRecord.java
+|       DecisionConsumeRecord.java
+|       HealthRecord.java
+|       InboxAckRecord.java
+|       LoginRecord.java
+|       PaymentOrder.java
+|       RechargePackage.java
+|       RefreshToken.java
+|       RefundOrder.java
+|       ReminderIntentRecord.java
+|       SpendOrder.java
+|       SystemMessageMetaRecord.java
+|       User.java
+|       UserCapabilityChangeRecord.java
+|       UserCapabilityProfile.java
+|       UserEventRecord.java
+|       UserProfile.java
+|       VerificationCode.java
+|       WalletAccount.java
+|       WalletTransaction.java
+|       HealthRecordRepo.java
+|       LoginRecordRepo.java
+|       PaymentOrderRepo.java
+|       RechargePackageRepo.java
+|       RefreshTokenRepo.java
+|       RefundOrderRepo.java
+|       SpendOrderRepo.java
+|       UserProfileRepo.java
+|       UserRepo.java
+|       VerificationCodeRepo.java
+|       WalletAccountRepo.java
+|       WalletTransactionRepo.java
+|       AuthRefreshTokenRepository.java
+|       ConversationRecordRepository.java
+|       DailyPlanRecordRepository.java
+|       DailySummaryRecordRepository.java
+|       DecisionConsumeRecordRepository.java
+|       InboxAckRecordRepository.java
+|       ReminderIntentRecordRepository.java
+|       SpendOrderRepository.java
+|       SystemMessageMetaRecordRepository.java
+|       UserCapabilityChangeRecordRepository.java
+|       UserCapabilityProfileRepository.java
+|       UserEventRecordRepository.java
+|       WalletAccountRepository.java
+|       JwtAuthFilter.java
+|       JwtUtil.java
+|       AuthService.java
+|       CodeService.java
+|       HealthService.java
+|       PayService.java
+|       PromoService.java
+|       RechargeService.java
+|       RefundService.java
+|       SpendService.java
+|       UserService.java
+|       WalletService.java
+|       SttController.java
+|       SttService.java
+|       TtsController.java
+|       TtsService.java
+|       AccountUtil.java
+|       Ids.java
+        FoodCandidate.java
+        FoodVisionController.java
+        FoodVisionService.java
